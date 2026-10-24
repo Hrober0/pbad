@@ -6,9 +6,18 @@
 
 **Tematyka:** Generowanie i ocena przestrzennych zapytań SQL dla PostGIS.
 
-Praca przedstawia GeoSQL-Eval — framework do oceny modeli językowych generujących zapytania przestrzenne SQL — oraz benchmark GeoSQL-Bench. Autorzy analizują m.in. poprawność składniową, zgodność ze schematem bazy danych, semantykę zapytań i poprawność wykonania. Uwzględniają różnorodne funkcje przestrzenne PostGIS i tematyczne bazy danych.
+Praca przedstawia GeoSQL-Eval — framework do oceny modeli językowych generujących zapytania przestrzenne SQL.
+Autorzy analizują m.in. poprawność składniową, zgodność ze schematem bazy danych, semantykę zapytań i poprawność wykonania.
+Framework uwzględnia różnorodne funkcje przestrzenne PostGIS i tematyczne bazy danych.
 
-**Znaczenie dla projektu:** Publikacja jest bezpośrednio związana z budową interfejsu NL2SpatialSQL. Może posłużyć jako punkt odniesienia przy projektowaniu własnego zestawu testowego, metryk ewaluacyjnych i procedury porównywania modeli.
+**Znaczenie dla projektu:** Publikacja może posłużyć jako punkt odniesienia przy projektowaniu własnego zestawu testowego, metryk ewaluacyjnych i procedury porównywania modeli.
+
+**Wnioski z artykułu:**
+- Poprawna składnia SQL nie gwarantuje, że zapytanie zwróci oczekiwane wyniki.
+- W zapytaniach przestrzennych ważne jest prawidłowe dobranie funkcji PostGIS, parametrów i układu współrzędnych.
+- Ocena modeli powinna uwzględniać nie tylko poprawność zapytania, ale także zgodność ze schematem bazy danych i poprawność wyników.
+- Osobno warto analizować błędy związane z niejednoznacznością pytań, funkcjami przestrzennymi i strukturą bazy danych.
+
 
 ## 2. From Questions to Queries: An AI-Powered Multi-Agent Framework for Spatial Text-to-SQL (2026)
 
@@ -20,6 +29,14 @@ Autorzy przedstawiają architekturę, w której poszczególne etapy zadania są 
 
 **Znaczenie dla projektu:** Praca może pomóc w zaprojektowaniu architektury aplikacji, szczególnie jeśli system ma analizować schemat bazy, wykrywać błędy SQL i automatycznie poprawiać wygenerowane zapytania.
 
+
+**Wnioski z artykułu:**
+- Weryfikowanie wygenerowanych zapytań i poprawianie ich na podstawie błędów wykonania może zwiększyć niezawodność systemu.
+- Złożone zapytania przestrzenne mogą wymagać bardziej rozbudowanego procesu generowania i weryfikacji niż proste zapytania.
+- Nie zawsze warto stosować architekturę wieloagentową — prostsze rozwiązania mogą być szybsze i tańsze dla łatwych zadań.
+- Typowe błędy dotyczą m.in. obliczania odległości, wyboru geometrii oraz sposobu wykonywania agregacji.
+
+
 ## 3. Monkuu: A LLM-Powered Natural Language Interface for Geospatial Databases with Dynamic Schema Mapping (2025)
 
 **Link:** https://www.tandfonline.com/doi/abs/10.1080/13658816.2025.2533322
@@ -29,6 +46,13 @@ Autorzy przedstawiają architekturę, w której poszczególne etapy zadania są 
 Monkuu koncentruje się na dopasowywaniu pojęć występujących w pytaniu użytkownika do tabel, kolumn i innych elementów rzeczywistej bazy danych. Istotnym elementem jest dynamiczne mapowanie schematu oraz możliwość doprecyzowania niejednoznacznych nazw geograficznych z udziałem użytkownika. Rozwiązanie uwzględnia więc nie tylko generowanie zapytania, ale również kontekst danych i niepewność interpretacji pytania.
 
 **Znaczenie dla projektu:** Publikacja jest szczególnie przydatna przy implementacji mechanizmu pobierania metadanych, dopasowywania terminów do schematu bazy i zadawania użytkownikowi pytań doprecyzowujących.
+
+**Wnioski z artykułu:**
+- Większa ilość informacji o schemacie bazy danych nie zawsze prowadzi do lepszych wyników.
+- Dynamiczne dobieranie informacji o schemacie może być skuteczniejsze niż przekazywanie całego schematu modelowi.
+- RAG może pomijać istotne informacje, natomiast pełny schemat może przeciążać kontekst modelu.
+- Poprawne rozpoznanie intencji użytkownika jest równie ważne jak dobranie tabel i kolumn — przykładowo pytanie o liczbę obiektów wymaga agregacji, a nie zwrócenia wszystkich rekordów.
+- Dodatkowe opisy schematu, reguły dotyczące danych i wyjaśnienia niejednoznacznych nazw mogą poprawiać jakość zapytań.
 
 ## 4. GPT-Based Text-to-SQL for Spatial Databases (2025)
 
@@ -40,6 +64,12 @@ Autorzy analizują generowanie zapytań przestrzennych SQL z wykorzystaniem info
 
 **Znaczenie dla projektu:** To użyteczny punkt wyjścia do stworzenia pierwszego prototypu aplikacji. Można wykorzystać podobną strategię promptowania, dostarczać modelowi schemat bazy i przykładowe zapytania, a następnie stosować kontrolowane poprawianie błędów.
 
+**Wnioski z artykułu:**
+- Generowanie zapytań przestrzennych wymaga nie tylko informacji o tabelach i kolumnach, ale także wiedzy o funkcjach przestrzennych oraz znaczeniu danych geograficznych.
+- Podpowiedzi dotyczące schematu mogą pomóc w rozwiązywaniu problemów z nieistniejącymi kolumnami, tabelami i niejednoznacznymi nazwami.
+- Autorzy wskazują, że różne elementy kontekstu — wiedza o systemie bazodanowym, opisy geograficzne i wskazówki dotyczące schematu — wpływają na jakość generowanych zapytań.
+- Zakres badania był ograniczony do wybranych funkcji i typów problemów, dlatego nie obejmuje wszystkich możliwych błędów w zapytaniach przestrzennych.
+
 ## 5. GS-SQL: Modeling Spatial Semantics in Spatial Text-to-SQL (2024)
 
 **Link:** https://ieeexplore.ieee.org/document/10651125
@@ -50,6 +80,14 @@ Praca zwraca uwagę na trudności, które pojawiają się przy tłumaczeniu pyta
 
 **Znaczenie dla projektu:** Publikacja może pomóc w opracowaniu mechanizmu interpretowania sformułowań takich jak „w pobliżu”, „wewnątrz”, „przecina się z” czy „najbliższy”. Są to pojęcia, które trzeba przełożyć na odpowiednie operacje i funkcje przestrzenne SQL.
 
+**Wnioski z artykułu:**
+- Rozpoznawanie znaczenia przestrzennego pytania i uwzględnianie go przy dopasowywaniu elementów schematu może poprawiać jakość generowanych zapytań.
+- Poprawne rozpoznanie encji przestrzennych pomaga modelowi lepiej dobierać tabele, kolumny i operacje.
+- Prostsze funkcje przestrzenne, takie jak `ST_Area`, `ST_Perimeter` i `ST_Length`, mogą być łatwiejsze do obsłużenia niż zapytania wymagające bardziej złożonych relacji między obiektami.
+- Zapytania wykorzystujące wiele argumentów, złożone relacje przestrzenne lub zagnieżdżoną składnię stanowią większe wyzwanie.
+- Ocena powinna uwzględniać znaczenie zapytania i jego wyniki, a nie tylko zgodność wygenerowanego kodu z jednym wzorcem SQL.
+
+
 ## 6. NALSpatial: An Effective Natural Language Transformation Framework for Queries over Spatial Data (2023)
 
 **Link:** https://dl.acm.org/doi/10.1145/3589132.3625600
@@ -59,6 +97,14 @@ Praca zwraca uwagę na trudności, które pojawiają się przy tłumaczeniu pyta
 NALSpatial przedstawia podejście etapowe, obejmujące rozpoznawanie encji, klasyfikację intencji i generowanie zapytań. System uwzględnia różne rodzaje operacji przestrzennych, m.in. zapytania zakresowe, wyszukiwanie najbliższych sąsiadów, złączenia przestrzenne oraz agregacje. Praca pokazuje, że poprawne tłumaczenie pytań geograficznych wymaga zarówno rozumienia języka, jak i znajomości operacji dostępnych w bazie danych.
 
 **Znaczenie dla projektu:** Publikacja jest przydatna przy projektowaniu pipeline’u tłumaczenia pytań na SQL. Może również pomóc w określeniu zestawu obsługiwanych typów zapytań w pierwszej wersji aplikacji.
+
+**Wnioski z artykułu:**
+- Tłumaczenie pytania na zapytanie przestrzenne można podzielić na rozpoznawanie intencji i parametrów oraz generowanie zapytania.
+- Ważne jest rozpoznawanie takich informacji jak lokalizacja, próg odległości, liczba najbliższych obiektów i rodzaj relacji przestrzennej.
+- System obsługuje cztery typy zapytań: zakresowe, wyszukiwanie najbliższych sąsiadów, złączenia przestrzenne i agregacje.
+- Autorzy raportują 95% poprawnie przetłumaczonych zapytań, 92% zapytań spełniających przyjęte kryterium poprawności wyników oraz średni czas odpowiedzi wynoszący około 2,5 sekundy.
+- Wyników nie można bezpośrednio porównywać z innymi systemami, ponieważ NALSpatial wykorzystuje odmienną architekturę i bazę SECONDO, a nie PostGIS.
+
 
 ## 7. Is ChatGPT a Good Geospatial Data Analyst? Exploring the Integration of Natural Language into Structured Query Language within a Spatial Database (2024)
 
