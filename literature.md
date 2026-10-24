@@ -1,12 +1,10 @@
-# 10 najważniejszych publikacji o wykorzystaniu LLM do generowania przestrzennych zapytań SQL
-
 ## 1. GeoSQL-Eval: First Evaluation of LLMs on PostGIS-Based NL2GeoSQL Queries (2026)
 
 **Link:** https://www.sciencedirect.com/science/article/pii/S0957417426010353
 
 **Tematyka:** Generowanie i ocena przestrzennych zapytań SQL dla PostGIS.
 
-Praca przedstawia GeoSQL-Eval — framework do oceny modeli językowych generujących zapytania przestrzenne SQL.
+Praca przedstawia GeoSQL-Eval - framework do oceny modeli językowych generujących zapytania przestrzenne SQL.
 Autorzy analizują m.in. poprawność składniową, zgodność ze schematem bazy danych, semantykę zapytań i poprawność wykonania.
 Framework uwzględnia różnorodne funkcje przestrzenne PostGIS i tematyczne bazy danych.
 
@@ -29,11 +27,10 @@ Autorzy przedstawiają architekturę, w której poszczególne etapy zadania są 
 
 **Znaczenie dla projektu:** Praca może pomóc w zaprojektowaniu architektury aplikacji, szczególnie jeśli system ma analizować schemat bazy, wykrywać błędy SQL i automatycznie poprawiać wygenerowane zapytania.
 
-
 **Wnioski z artykułu:**
 - Weryfikowanie wygenerowanych zapytań i poprawianie ich na podstawie błędów wykonania może zwiększyć niezawodność systemu.
 - Złożone zapytania przestrzenne mogą wymagać bardziej rozbudowanego procesu generowania i weryfikacji niż proste zapytania.
-- Nie zawsze warto stosować architekturę wieloagentową — prostsze rozwiązania mogą być szybsze i tańsze dla łatwych zadań.
+- Nie zawsze warto stosować architekturę wieloagentową - prostsze rozwiązania mogą być szybsze i tańsze dla łatwych zadań.
 - Typowe błędy dotyczą m.in. obliczania odległości, wyboru geometrii oraz sposobu wykonywania agregacji.
 
 
@@ -51,8 +48,9 @@ Monkuu koncentruje się na dopasowywaniu pojęć występujących w pytaniu użyt
 - Większa ilość informacji o schemacie bazy danych nie zawsze prowadzi do lepszych wyników.
 - Dynamiczne dobieranie informacji o schemacie może być skuteczniejsze niż przekazywanie całego schematu modelowi.
 - RAG może pomijać istotne informacje, natomiast pełny schemat może przeciążać kontekst modelu.
-- Poprawne rozpoznanie intencji użytkownika jest równie ważne jak dobranie tabel i kolumn — przykładowo pytanie o liczbę obiektów wymaga agregacji, a nie zwrócenia wszystkich rekordów.
+- Poprawne rozpoznanie intencji użytkownika jest równie ważne jak dobranie tabel i kolumn - przykładowo pytanie o liczbę obiektów wymaga agregacji, a nie zwrócenia wszystkich rekordów.
 - Dodatkowe opisy schematu, reguły dotyczące danych i wyjaśnienia niejednoznacznych nazw mogą poprawiać jakość zapytań.
+
 
 ## 4. GPT-Based Text-to-SQL for Spatial Databases (2025)
 
@@ -67,8 +65,8 @@ Autorzy analizują generowanie zapytań przestrzennych SQL z wykorzystaniem info
 **Wnioski z artykułu:**
 - Generowanie zapytań przestrzennych wymaga nie tylko informacji o tabelach i kolumnach, ale także wiedzy o funkcjach przestrzennych oraz znaczeniu danych geograficznych.
 - Podpowiedzi dotyczące schematu mogą pomóc w rozwiązywaniu problemów z nieistniejącymi kolumnami, tabelami i niejednoznacznymi nazwami.
-- Autorzy wskazują, że różne elementy kontekstu — wiedza o systemie bazodanowym, opisy geograficzne i wskazówki dotyczące schematu — wpływają na jakość generowanych zapytań.
-- Zakres badania był ograniczony do wybranych funkcji i typów problemów, dlatego nie obejmuje wszystkich możliwych błędów w zapytaniach przestrzennych.
+- Wiedza o systemie bazodanowym, opisy geograficzne i wskazówki dotyczące schematu - wpływają na jakość generowanych zapytań.
+
 
 ## 5. GS-SQL: Modeling Spatial Semantics in Spatial Text-to-SQL (2024)
 
@@ -116,33 +114,25 @@ Autorzy badają, w jakim stopniu model językowy może wspierać użytkownika w 
 
 **Znaczenie dla projektu:** Publikacja dobrze uzasadnia potrzebę budowy kompletnego interfejsu, który nie tylko generuje kod SQL, lecz także wykonuje zapytanie i pomaga użytkownikowi zrozumieć wynik.
 
----
-
-Wnioski z artykułu:
-
+**Wnioski z artykułu:**
 - LLM w większości przypadków generują poprawny przestrzenny SQL, ale skuteczność spada wraz ze złożonością pytania. Najtrudniejsze są złączenia przestrzenne kilku tabel.
-
-- Autorzy porównali różne ustawienia temperatury modelu, czyli parametru, który określa, jak bardzo losowe są odpowiedzi. Najlepsze wyniki dawała temperatura 0, przy której model zawsze wybiera najbardziej prawdopodobną odpowiedź. Porównali też kilka modeli (GPT-4, PaLM 2, LLaMA 2) i najlepiej wypadł GPT-4.
-
 - Autorzy wskazują brak dużego zbioru testowego dla przestrzennego Text-to-SQL. Taki zbiór powinien obejmować różne typy zadań i nieprecyzyjne pytania.
+
 
 ## 8. Large Language Models for Spatial Analysis Queries (2025)
 
 **Link:** https://www.vldb.org/pvldb/vol18/p5451-mokbel.pdf
 
-**Tematyka:** Przegląd zastosowań dużych modeli językowych do zapytań analitycznych dotyczących danych przestrzennych.
+**Tematyka:** Tematyka: Krótki przegląd sposobów wykorzystania dużych modeli językowych w analizie danych przestrzennych.
 
-Publikacja porządkuje metody wykorzystywania LLM w analizie przestrzennej. Omawia różne sposoby łączenia modeli z danymi i systemami analitycznymi, a także kwestie związane z oceną jakości, ograniczeniami obecnych rozwiązań i kierunkami dalszych badań. Jej zakres jest szerszy niż samo tłumaczenie języka naturalnego na SQL, dzięki czemu dostarcza kontekstu dla całego obszaru badań nad analizą przestrzenną wspieraną przez modele językowe.
+Publikacja zestawia dotychczasowe prace o LLM w analizie przestrzennej. Grupuje je według tego, jak bardzo model jest dostosowywany do danych przestrzennych, oraz według rodzaju zastosowań (m.in. ruch drogowy, trajektorie, punkty POI). Nie zawiera własnych eksperymentów ani szczegółowego omówienia wyników.
 
-**Znaczenie dla projektu:** To wartościowe źródło do przeglądu literatury, identyfikacji luk badawczych i uzasadnienia, dlaczego interfejs języka naturalnego do analizy przestrzennej stanowi interesujący problem badawczy.
+**Znaczenie dla projektu:** Przydatna głównie we wstępie, do pokazania szerszego kontekstu i umiejscowienia naszego podejścia (gotowy model sterowany promptem) wśród innych sposobów wykorzystania LLM.
 
----
+**Wnioski z artykułu:**
+- Publikacja ma charakter krótkiego przeglądu i porządkuje dotychczasowe prace dotyczące wykorzystania LLM w analizie danych przestrzennych.
+- Autorzy wyróżniają cztery podejścia, uporządkowane według stopnia ingerencji w model: użycie gotowego modelu sterowanego promptem, douczenie modelu na danych z zadania (fine-tuning), wytrenowanie modelu od zera na danych przestrzennych oraz dodatkową zmianę sposobu jego uczenia pod zadania przestrzenne. Głębsze dostosowanie daje wyższą dokładność, ale wymaga więcej pracy.
 
-Wnioski z artykułu:
-
-- Artykuł jest zarysem tutorialu, a nie badaniem. Porządkuje dotychczasowe prace dotyczące wykorzystania LLM w analizie danych przestrzennych.
-
-- Autorzy dzielą podejścia według stopnia ingerencji w model: od gotowego modelu sterowanego promptem, przez douczanie, aż po trenowanie od zera na danych przestrzennych. Głębsze dostosowanie daje wyższą dokładność, ale wymaga więcej pracy.
 
 ## 9. Text-to-SQL Empowered by Large Language Models: A Benchmark Evaluation (DAIL-SQL, 2023)
 
@@ -150,19 +140,18 @@ Wnioski z artykułu:
 
 **Tematyka:** Ocena metod generowania SQL z wykorzystaniem dużych modeli językowych.
 
-Praca analizuje strategie promptowania, wybór przykładów oraz sposób przekazywania kontekstu modelowi. Autorzy przedstawiają DAIL-SQL — podejście wykorzystujące m.in. dobór przykładów do pytania użytkownika i odpowiednią organizację promptu. Badanie dotyczy ogólnego Text-to-SQL, a nie wyłącznie baz przestrzennych, ale dostarcza użytecznych metod oceny jakości i projektowania generatorów SQL.
+Praca analizuje strategie promptowania, wybór przykładów oraz sposób przekazywania kontekstu modelowi.
+Autorzy przedstawiają DAIL-SQL - podejście wykorzystujące m.in. dobór przykładów do pytania użytkownika i odpowiednią organizację promptu.
+Badanie dotyczy ogólnego Text-to-SQL, a nie wyłącznie baz przestrzennych, ale dostarcza użytecznych metod oceny jakości i projektowania generatorów SQL.
 
 **Znaczenie dla projektu:** Publikacja może posłużyć do wyboru strategii few-shot prompting, przygotowania przykładów SQL i zaplanowania porównania kilku modeli lub wariantów promptu. Wyników uzyskanych na standardowych bazach relacyjnych nie należy jednak bezpośrednio traktować jako miary jakości generowania PostGIS SQL.
 
----
-
-Wnioski z artykułu:
-
-- Sposób zbudowania promptu, czyli zapis schematu bazy, dobór przykładów i ich forma, ma istotny wpływ na poprawność generowanego SQL.
-
-- Najlepsze wyniki dawał schemat bazy zapisany jako kod SQL z kluczami głównymi i obcymi oraz przykłady pytanie → SQL dobierane automatycznie pod konkretne pytanie, podobne zarówno w treści pytania, jak i w strukturze zapytania.
-
+**Wnioski z artykułu:**
+- Sposób zbudowania promptu, zapis schematu bazy, dobór przykładów i ich forma, ma istotny wpływ na poprawność generowanego SQL.
+- Najlepsze wyniki uzyskano, gdy model otrzymywał strukturę bazy danych w postaci kodu SQL, uwzględniającego klucze główne i obce.
+- Dodanie do promputu przykładów pytań wraz z odpowiadającymi im zapytaniami SQL poprawiało wyniki. Przykłady te były automatycznie dobierane na podstawie podobieństwa do aktualnego pytania, zarówno pod względem treści, jak i struktury zapytania SQL
 - Autorzy podkreślają, że oprócz poprawności liczy się też długość promptu, bo wpływa na koszt. Ich metoda osiągnęła lepsze wyniki niż wcześniejsze rozwiązania, mimo krótszego promptu.
+
 
 ## 10. Benchmarking and Improving Text-to-SQL Generation under Ambiguity (EMNLP 2023)
 
@@ -170,19 +159,15 @@ Wnioski z artykułu:
 
 **Tematyka:** Generowanie SQL dla niejednoznacznych pytań w języku naturalnym.
 
-Autorzy analizują sytuacje, w których jedno pytanie użytkownika może mieć kilka poprawnych interpretacji. Przedstawiają benchmark AmbiQT oraz metodę LogicalBeam, która ma wspierać generowanie odmiennych interpretacji logicznych. Praca pokazuje, że różne wygenerowane zapytania nie muszą reprezentować różnych znaczeń pytania — mogą być jedynie odmiennymi zapisami podobnej logiki.
+Autorzy analizują sytuacje, w których jedno pytanie użytkownika może mieć kilka poprawnych interpretacji. Przedstawiają benchmark AmbiQT oraz metodę LogicalBeam, która ma wspierać generowanie odmiennych interpretacji logicznych. Praca pokazuje, że różne wygenerowane zapytania nie muszą reprezentować różnych znaczeń pytania - mogą być jedynie odmiennymi zapisami podobnej logiki.
 
-**Znaczenie dla projektu:** To ważne źródło przy projektowaniu interfejsu, który powinien wykrywać niejednoznaczność, prezentować możliwe interpretacje i prosić użytkownika o doprecyzowanie pytania przed wykonaniem zapytania SQL.
+**Znaczenie dla projektu:** To ważne źródło przy projektowaniu interfejsu, który powinien wykrywać niejednoznaczność, prezentować możliwe interpretacje i ewentualnie prosić użytkownika o doprecyzowanie pytania przed wykonaniem zapytania SQL.
 
----
-
-Wnioski z artykułu:
-
+**Wnioski z artykułu:**
 - Jedno pytanie użytkownika można czasem zinterpretować na kilka poprawnych sposobów, co prowadzi do różnych zapytań SQL.
-
 - Badane modele, w tym ChatGPT, zwykle podawały tylko jedną interpretację. Kolejne generowane warianty SQL różniły się zapisem, a nie znaczeniem.
-
 - Według autorów idealny system powinien przedstawić wszystkie możliwe interpretacje, aby użytkownik mógł wybrać właściwą.
+
 
 ## 11. Foundation Models for Geospatial Reasoning: Assessing the Capabilities of Large Language Models in Understanding Geometries and Topological Spatial Relations (2025)
 
@@ -190,18 +175,12 @@ Wnioski z artykułu:
 
 **Tematyka:** Ocena zdolności dużych modeli językowych do rozumienia geometrii i relacji topologicznych między obiektami geograficznymi.
 
-Autorzy badają, czy modele językowe potrafią interpretować geometrie zapisane w formacie WKT (_Well-Known Text_) oraz rozpoznawać relacje przestrzenne między obiektami. Analizują m.in. wykorzystanie promptowania i reprezentacji geometrii do wnioskowania o relacjach topologicznych. Wyniki pokazują, że modele językowe mogą wspierać rozumowanie przestrzenne, ale nadal popełniają istotne błędy, co ogranicza możliwość bezwarunkowego polegania na ich interpretacji.
+Autorzy badają, czy modele językowe potrafią interpretować geometrie zapisane w formacie WKT (Well-Known Text) oraz rozpoznawać relacje przestrzenne między obiektami. Analizują m.in. wykorzystanie promptowania i reprezentacji geometrii do wnioskowania o relacjach topologicznych. Wyniki pokazują, że modele językowe mogą wspierać rozumowanie przestrzenne, ale nadal popełniają istotne błędy, co ogranicza możliwość bezwarunkowego polegania na ich interpretacji.
 
-**Znaczenie dla projektu:** Publikacja jest szczególnie przydatna przy projektowaniu mechanizmu interpretacji pojęć przestrzennych, takich jak „wewnątrz”, „przecina się z”, „nakłada się na” czy „dotyka”. Może pomóc w opracowaniu testów sprawdzających, czy system poprawnie przekłada znaczenie pytania użytkownika na odpowiednie operacje i funkcje PostGIS, np. `ST_Contains`, `ST_Intersects` lub `ST_Touches`. Nie jest to jednak bezpośrednio system generujący kompletne zapytania SQL, dlatego najlepiej traktować tę pracę jako uzupełnienie badań nad generowaniem przestrzennego Text-to-SQL.
+**Znaczenie dla projektu:** Artykuł bada wykorzystanie LLM do generowania zapytań przestrzennych SQL zamiast samodzielnego wykonywania obliczeń geometrycznych. Wskazuje również, że sposób formułowania promptu i przekazywane informacje o danych mogą wpływać na poprawność odpowiedzi modelu.
 
----
-
-Wnioski z artykułu:
-
+**Wnioski z artykułu:**
 - Modele językowe mają trudność z samodzielnym określaniem relacji przestrzennych między geometriami zapisanymi w formacie WKT.
-
 - Dodanie do promptu kilku przykładów (few-shot) oraz informacji o typie geometrii (punkt, linia, poligon) poprawiało wyniki.
-
 - Prompt nakazujący rozumowanie krok po kroku (Chain-of-Thought) pogarszał wyniki modeli GPT-3.5 i GPT-4
-
 - Autorzy stwierdzają, że w obliczeniach geometrycznych bazy przestrzenne przewyższają LLM. Jako obiecujący kierunek wskazują podejście, w którym LLM tłumaczy pytanie użytkownika na formalne zapytanie, a obliczenia wykonuje baza danych.
