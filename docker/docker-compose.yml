@@ -1,0 +1,16 @@
+name: pbad-postgis-playground
+
+services:
+  postgres:
+    image: postgis/postgis:18-3.6
+    container_name: pbad-postgres
+    environment:
+      POSTGRES_USER: pbad
+      POSTGRES_PASSWORD: pbad
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
