@@ -102,21 +102,6 @@ CREATE TABLE gis_osm_pois_a_free (
 
 **Rozmiar:** ok. 1,5 tys. tokenów.
 
-### Wariant opcjonalny K1-md: schemat jako tabela markdown
-
-Ta sama informacja co w K1, ale zapisana jako tabele markdown. Ten wariant porównujemy tylko z K1, aby osobno sprawdzić, czy wynik zależy od formatu zapisu schematu (pierwsza część H1). Jeśli zabraknie czasu, można go pominąć bez szkody dla reszty eksperymentu.
-
-```markdown
-### gis_osm_pois_free
-| kolumna | typ |
-|---|---|
-| fid | integer (klucz główny) |
-| osm_id | varchar(12) |
-| fclass | varchar(28) |
-| name | varchar(100) |
-| geom | geometry(Point, 4326) |
-```
-
 ---
 
 ## K2: K1 + wiedza o danych
@@ -179,7 +164,7 @@ Fakty pochodzą z „Ustaleń dotyczących danych” w [pytania-testowe.md](pyta
 - wie o rozdzieleniu punktów i poligonów, o granicy Warszawy i o pustych nazwach,
 - wie o obiektach, których nazwy w bazie różnią się od potocznych.
 
-**Rola w eksperymencie:** główny poziom dla hipotezy H1. Jeśli skok K1→K2 jest większy niż różnica K1 vs K1-md, to wiedza o danych waży więcej niż format schematu.
+**Rola w eksperymencie:** główny poziom dla hipotezy H1. Porównanie K1 i K2 pokazuje, czy wiedza o danych zwiększa odsetek poprawnych zapytań w porównaniu z samym schematem bazy.
 
 **Rozmiar:** ok. 4–5 tys. tokenów, z czego większość to lista `fclass`.
 
