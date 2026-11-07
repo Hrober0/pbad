@@ -1,4 +1,18 @@
-# H1: pytania
+# H1
+
+## Kategorie zapytań
+
+Kategorie Z, N, J, A pochodzą z NALSpatial (praca 6 w przeglądzie literatury). Kategorię M dodaliśmy na podstawie GS-SQL (praca 5), bo funkcje pomiarowe są osobną, łatwiejszą grupą.
+
+| Kod | Kategoria | Typowe funkcje PostGIS |
+|---|---|---|
+| Z | Zakresowe (obiekty w odległości / wewnątrz obszaru) | `ST_DWithin`, `ST_Intersects` |
+| N | Najbliżsi sąsiedzi | `ORDER BY geom <-> ...`, `ST_Distance` |
+| J | Złączenia przestrzenne (relacje między dwiema warstwami) | `JOIN ... ON ST_DWithin / ST_Intersects` |
+| A | Agregacje przestrzenne | `COUNT`, `GROUP BY`, `HAVING` + funkcje przestrzenne |
+| M | Pomiary geometrii | `ST_Area`, `ST_Length`, `ST_Perimeter`, `ST_Distance` |
+
+## Pytania
 
 20 pytań × 4 poziomy kontekstu (K0–K3) × 3 powtórzenia = 240 wywołań.
 
