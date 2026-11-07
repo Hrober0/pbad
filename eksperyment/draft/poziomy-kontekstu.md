@@ -184,7 +184,9 @@ Fakty opisują dane jako całość i żaden z nich nie podaje nazwy obiektu, o k
 - Do liczenia długości lub powierzchni w granicach obszaru użyj ST_Intersection.
 - Gdy pytanie dotyczy typu obiektu z pois, połącz gis_osm_pois_free i gis_osm_pois_a_free
   przez UNION.
-- Aby pominąć obiekty bez nazwy, użyj warunku name <> ''.
+- Gdy pytanie prosi o nazwy obiektów, pomijaj obiekty bez nazwy warunkiem name <> ''.
+  Brak nazwy zapisano jako pusty napis, więc name IS NOT NULL niczego nie odfiltruje.
+  Przy zliczaniu i mierzeniu nie filtruj po nazwie.
 - Aby liczyć każdy obiekt raz, użyj COUNT(DISTINCT osm_id).
 - Obiekty referencyjne wybieraj z bazy po nazwie. Nie wpisuj współrzędnych ręcznie.
 - Nazwa w bazie może różnić się od nazwy z pytania, więc dopasowuj po fragmencie,
@@ -201,25 +203,26 @@ Mamy 5 przykładów, po jednym z każdej kategorii (Z, N, A, J, M). Wszystkie wy
 Inaczej niż w DAIL-SQL przykłady są stałe, a nie dobierane do pytania. Dzięki temu nie potrzeba wyszukiwania (RAG), a wszystkie pytania dostają ten sam kontekst.
 
 ```sql
--- Pytanie: Ile piekarni jest w promieniu 400 m od stacji Warszawa Gdańska?
-WITH ref AS (SELECT geom FROM gis_osm_transport_free
-             WHERE fclass = 'railway_station' AND name = 'Warszawa Gdańska'),
-poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bakery' AND name <> ''
-        UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bakery' AND name <> '')
+-- Pytanie: Ile piekarni jest w promieniu 400 m od Muzeum Narodowego w Warszawie?
+WITH ref AS (SELECT geom FROM gis_osm_pois_free
+             WHERE fclass = 'museum' AND name ILIKE '%Muzeum Narodowe%'),
+poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bakery'
+        UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bakery')
 SELECT count(DISTINCT poi.osm_id)
 FROM poi, ref
 WHERE ST_DWithin(poi.geom::geography, ref.geom::geography, 400);
--- wynik: 6
+-- wynik: 2
 
--- Pytanie: Jakie są 3 banki najbliższe Ogrodu Saskiego i jak daleko są w metrach?
-WITH ref AS (SELECT geom FROM gis_osm_landuse_a_free WHERE fclass = 'park' AND name = 'Ogród Saski'),
+-- Pytanie: Jakie są 3 banki najbliższe Cmentarzowi Powązkowskiemu i jak daleko są w metrach?
+WITH ref AS (SELECT geom FROM gis_osm_landuse_a_free
+             WHERE fclass = 'cemetery' AND name ILIKE '%Powązkowski%'),
 poi AS (SELECT osm_id, name, geom FROM gis_osm_pois_free WHERE fclass = 'bank' AND name <> ''
         UNION SELECT osm_id, name, geom FROM gis_osm_pois_a_free WHERE fclass = 'bank' AND name <> '')
 SELECT poi.name, round(ST_Distance(poi.geom::geography, ref.geom::geography)) AS distance_m
 FROM poi, ref
 ORDER BY distance_m
 LIMIT 3;
--- wynik: mBank 57, Bank Pekao 60, Bank Pekao 187
+-- wynik: Bank Pekao 270, Millennium Bank 480, Millennium Bank 501
 
 -- Pytanie: Które 3 dzielnice Warszawy mają najwięcej księgarń?
 WITH waw AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level6' AND name = 'Warszawa'),
@@ -234,24 +237,24 @@ ORDER BY bookshops DESC
 LIMIT 3;
 -- wynik: Śródmieście 67, Mokotów 23, Praga-Południe 14
 
--- Pytanie: Ile kościołów w Warszawie ma przystanek autobusowy w promieniu 100 m?
+-- Pytanie: Ile kościołów w Warszawie ma stację paliw w promieniu 300 m?
 WITH waw AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level6' AND name = 'Warszawa'),
-ch AS (SELECT osm_id, geom FROM gis_osm_pofw_free WHERE fclass LIKE 'christian%' AND name <> ''
-       UNION SELECT osm_id, geom FROM gis_osm_pofw_a_free WHERE fclass LIKE 'christian%' AND name <> '')
+ch AS (SELECT osm_id, geom FROM gis_osm_pofw_free WHERE fclass LIKE 'christian%'
+       UNION SELECT osm_id, geom FROM gis_osm_pofw_a_free WHERE fclass LIKE 'christian%')
 SELECT count(DISTINCT ch.osm_id)
 FROM ch, waw
 WHERE ST_Intersects(ch.geom, waw.geom)
-  AND EXISTS (SELECT 1 FROM gis_osm_transport_free t
-              WHERE t.fclass = 'bus_stop' AND t.name <> ''
-                AND ST_DWithin(ch.geom::geography, t.geom::geography, 100));
--- wynik: 151
+  AND EXISTS (SELECT 1 FROM gis_osm_traffic_free t
+              WHERE t.fclass = 'fuel'
+                AND ST_DWithin(ch.geom::geography, t.geom::geography, 300));
+-- wynik: 17
 
 -- Pytanie: Ile hektarów zajmują wody na Żoliborzu?
 WITH zol AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level9' AND name = 'Żoliborz')
 SELECT round((sum(ST_Area(ST_Intersection(w.geom, zol.geom)::geography)) / 10000)::numeric, 2) AS area_ha
-FROM (SELECT DISTINCT ON (osm_id) osm_id, geom FROM gis_osm_water_a_free WHERE name <> '') w, zol
+FROM gis_osm_water_a_free w, zol
 WHERE ST_Intersects(w.geom, zol.geom);
--- wynik: 3.69
+-- wynik: 53.59
 ```
 
 W prompcie przykłady podajemy bez komentarzy `-- wynik`. Wyniki zapisaliśmy tu tylko po to, żeby było widać, że zapytania zostały sprawdzone.

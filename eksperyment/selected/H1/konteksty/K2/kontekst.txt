@@ -259,6 +259,7 @@ Znaczenie wybranych wartości fclass:
 - pois: 'hospital' = szpital; 'clinic' = przychodnia bez hospitalizacji; 'doctors' = gabinet lekarski.
 - pois: 'school' = szkoła; 'kindergarten' = przedszkole; 'university' = uczelnia.
 - pois: 'bicycle_rental' = wypożyczalnia rowerów, w tym stacje roweru miejskiego.
+- pois: 'post_office' = urząd pocztowy; 'post_box' = skrzynka pocztowa na listy, a nie urząd.
 - transport: 'railway_station' = większa stacja kolejowa; 'railway_halt' = mniejszy, lokalny przystanek kolejowy; 'tram_stop' = przystanek tramwajowy; 'bus_stop' = przystanek autobusowy; 'bus_station' = dworzec autobusowy.
 - transport: 'airport' = duże lotnisko; 'airfield' = małe lotnisko lub lądowisko; 'apron' = płyta postojowa samolotów.
 - roads: 'motorway' = autostrada; 'trunk' = droga ekspresowa lub główna dwujezdniowa; 'primary' = droga krajowa; 'secondary' = droga regionalna; 'tertiary' = droga lokalna; 'residential' = ulica osiedlowa; 'living_street' = strefa zamieszkania; 'pedestrian' = deptak; 'service' = droga dojazdowa; 'track' = droga gruntowa lub leśna; 'cycleway' = droga rowerowa; 'footway' = chodnik lub ścieżka piesza; 'path' = ścieżka; końcówka '_link' = łącznik lub zjazd.

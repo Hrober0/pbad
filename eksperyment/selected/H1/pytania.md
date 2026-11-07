@@ -23,12 +23,12 @@ Kategorie Z, N, J, A pochodzą z NALSpatial (praca 6 w przeglądzie literatury).
 | Z01 | Ile aptek jest w promieniu 500 metrów od Pałacu Kultury i Nauki? | liczba | współrzędne z pamięci; obie tabele `pois` |
 | Z02 | Wymień nazwy kawiarni w promieniu 300 metrów od Dworca Centralnego. | `name` | nazwa „Warszawa Centralna” |
 | Z05 | Ile aptek jest w promieniu kilometra od Skweru Jolanty Brzeskiej? | liczba | czy znalazł obiekt w bazie |
-| Z07 | Ile supermarketów jest w Warszawie? | liczba | zawężenie do granicy Warszawy; `name <> ''` |
+| Z07 | Ile supermarketów jest w Warszawie? | liczba | zawężenie do granicy Warszawy; obie tabele `pois`; bez filtra po nazwie |
 | N01 | Jaki szpital jest najbliżej Pałacu Kultury i Nauki? | `name` | obie tabele `pois` (7 punktów, 37 poligonów) |
 | N03 | Jak daleko w metrach jest najbliższy urząd pocztowy od Dworca Centralnego i jak się nazywa? | `name`, odległość | `::geography`, nie stopnie |
 | N04 | Wymień 5 aptek położonych najbliżej Zamku Królewskiego. | `name` w kolejności | kolejność; obie tabele `pois` |
 | N07 | Wymień 3 przystanki autobusowe najbliższe pomnikowi pamięci Konstantego Juliana Ordona i podaj, jak daleko są w metrach. | `name` w kolejności, odległość | nazwa w bazie: „Pamięci Konstantego Juliana Ordona” |
-| J01 | Które szkoły w Warszawie mają w promieniu 300 metrów co najmniej jeden fast food? | `name` | obie tabele dla obu warstw; `name <> ''` |
+| J01 | Które szkoły w Warszawie mają w promieniu 300 metrów co najmniej jeden fast food? | `name` | obie tabele dla obu warstw; `name <> ''` tylko dla szkół, bo to one są wynikiem |
 | J02 | Ile przedszkoli w Warszawie nie ma żadnego parku w promieniu 500 metrów? | liczba | `NOT EXISTS`; parki tylko z `landuse` |
 | J03 | Przez które parki w Warszawie przepływa Wisła albo które parki do niej przylegają? | `name` | Wisła jako wiele odcinków; parki tylko z `landuse` |
 | J08 | Wymień nazwy mostów samochodowych na Wiśle w Warszawie. | `name` | wartość `fclass` dla mostu |

@@ -61,7 +61,7 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
   - Liczby zmiennoprzecinkowe (odległości, powierzchnie, długości) uznajemy za równe przy różnicy do 1%, żeby różne zaokrąglenia nie były traktowane jako błąd.
   - Napisy porównujemy dokładnie.
   - Zapytanie, które się nie wykonuje, jest niepoprawne.
-- **Warunki eksperymentów:** jedno wywołanie modelu bez historii i bez poprawiania zapytań, ten sam model i te same ustawienia we wszystkich próbach. W artykule podajemy dokładny identyfikator modelu (np. `claude-sonnet-5`) oraz wartość parametru `effort`, który ustawiamy jawnie. Temperatury nie ustawiamy, bo w obecnym API modeli Claude wartość inna niż domyślna jest odrzucana. Pytania, treść poziomów i kryteria oceny ustalamy przed badaniem.
+- **Warunki eksperymentów:** jedno wywołanie modelu bez historii i bez poprawiania zapytań, ten sam model i te same ustawienia we wszystkich próbach. W artykule podajemy dokładny identyfikator modelu (`claude-sonnet-5-5`) oraz wartość parametru `effort`, który ustawiamy jawnie na `medium`. Temperatury nie ustawiamy, bo w obecnym API modeli Claude wartość inna niż domyślna jest odrzucana. Pytania, treść poziomów i kryteria oceny ustalamy przed badaniem.
 
 ## Potrzebne zasoby, dane, materiały
 

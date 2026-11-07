@@ -14,6 +14,7 @@ class Chat:
         with self.client.messages.stream(
             model=self.config.model,
             max_tokens=self.config.max_tokens,
+            output_config={"effort": self.config.effort},
             messages=[{"role": "user", "content": question}],
         ) as stream:
             yield from stream.text_stream
