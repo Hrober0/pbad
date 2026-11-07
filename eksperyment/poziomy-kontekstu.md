@@ -164,7 +164,7 @@ Fakty pochodzą z „Ustaleń dotyczących danych” w [pytania-testowe.md](pyta
 - wie o rozdzieleniu punktów i poligonów, o granicy Warszawy i o pustych nazwach,
 - wie o obiektach, których nazwy w bazie różnią się od potocznych.
 
-**Rola w eksperymencie:** główny poziom dla hipotezy H1. Porównanie K1 i K2 pokazuje, czy wiedza o danych zwiększa odsetek poprawnych zapytań w porównaniu z samym schematem bazy.
+**Rola w eksperymencie:** główny poziom dla hipotezy H1. Przyrost trafności K1 → K2 mierzy wpływ opisu zawartości danych. Według H1 ma być większy niż przyrost K0 → K1 (opis struktury) i K2 → K3 (wskazówki i przykłady).
 
 **Rozmiar:** ok. 4–5 tys. tokenów, z czego większość to lista `fclass`.
 
@@ -256,7 +256,11 @@ W prompcie przykłady podajemy bez komentarzy `-- wynik`. Wyniki zapisaliśmy tu
 
 **Co model zyskuje względem K2:** gotowe wzorce rozwiązań typowych pułapek: `geography`, `UNION` obu tabel `pois`, `name <> ''`, `COUNT(DISTINCT osm_id)`, `ST_Intersection`, pobieranie obiektu referencyjnego z bazy.
 
-**Rola w eksperymencie:** górna granica tego, co da się osiągnąć samym kontekstem przy prostej architekturze. Porównanie K2→K3 pokazuje, czy model sam przekłada fakty o danych na poprawny SQL, czy potrzebuje wzorców.
+**Rola w eksperymencie:**
+- Przyrost trafności K2 → K3 mierzy wpływ wskazówek i przykładów zapytań. Jest jednym z dwóch przyrostów, z którymi H1 porównuje przyrost K1 → K2.
+- Pokazuje, czy model sam przekłada fakty o danych na poprawny SQL, czy potrzebuje wzorców.
+- K3 to też górna granica tego, co da się osiągnąć samym kontekstem przy prostej architekturze.
+- Jest stałym poziomem kontekstu w eksperymencie 2 (H2).
 
 **Rozmiar:** ok. 6–7 tys. tokenów.
 

@@ -5,19 +5,66 @@ Kilka przykładowych pytań do każdego eksperymentu, a dla każdego z nich: co 
 | | Eksperyment 1 | Eksperyment 2 |
 |---|---|---|
 | Hipoteza | H1 | H2 |
-| Co zmieniamy | poziom kontekstu K0–K3 | niejasność pytania S1–S3 |
-| Co jest stałe | wersja pytania (naturalna) | kontekst K3 |
-| Pytania | 20 z [pytania-testowe.md](pytania-testowe.md) | ok. 5 zadań × 3 poziomy niejasności |
+| Co zmieniamy | poziom kontekstu K0–K3 | określenie przestrzenne, rodzaj obiektu, sytuacja pytającego |
+| Co jest stałe | wersja pytania (naturalna) | kontekst K3, punkt odniesienia (Dworzec Centralny) |
+| Pytania | 20 z [pytania-testowe.md](pytania-testowe.md) | 24 (część 2a) + 4 (część 2b) = 28 |
 | Powtórzenia | 3 | 10 |
-| Liczba wywołań | 20 × 4 × 3 = 240 | 5 × 3 × 10 = 150 |
+| Liczba wywołań | 20 × 4 × 3 = 240 | 28 × 10 = 280 |
 | Odpowiedź modelu | samo zapytanie SQL | JSON `{"sql": "...", "uwagi": "..."}` |
-| Co mierzymy | odsetek poprawnych zapytań, rodzaje błędów | indeks Jaccarda, przyjęte wartości, sygnalizowanie niejasności |
+| Co mierzymy | trafność na każdym poziomie i jej przyrosty, rodzaje błędów | przyjęty promień, rodzaj interpretacji, ujawnienie założenia |
+| Potwierdzenie hipotezy | przyrost K1 → K2 większy niż K0 → K1 i K2 → K3 | promień zmienia się z rodzajem obiektu i sytuacją pytającego |
+| Zapytania wzorcowe | potrzebne | niepotrzebne |
 
 ---
 
 ## Eksperyment 1: wpływ kontekstu (H1)
 
-Pytania są w wersji naturalnej (P2) z [pytania-testowe.md](pytania-testowe.md). Każde ma jedno zapytanie wzorcowe.
+Sprawdzamy, który rodzaj informacji o bazie najbardziej poprawia trafność. Porównujemy trzy przyrosty:
+- opis struktury bazy danych: przyrost K0 → K1,
+- opis zawartości danych: przyrost K1 → K2,
+- wskazówki i przykłady zapytań: przyrost K2 → K3.
+
+Według H1 największy ma być przyrost K1 → K2.
+
+Pytania są w wersji naturalnej (P2) z [pytania-testowe.md](pytania-testowe.md). Każde ma jedno zapytanie wzorcowe. W przykładach poniżej przy każdym poziomie opisujemy, który rodzaj informacji powinien usunąć dany błąd.
+
+### Co dokładnie dostaje model
+
+Każda próba to jedno wywołanie API bez historii rozmowy. Model dostaje jedną wiadomość złożoną z trzech części:
+
+1. **Instrukcja zadania.** Jest taka sama we wszystkich próbach: rola, format odpowiedzi i konwencje oceny (przecięcie z obszarem, liczenie raz, pomijanie obiektów bez nazwy, jednostki). Pełna treść: [poziomy-kontekstu.md](poziomy-kontekstu.md#część-wspólna-dla-wszystkich-poziomów).
+2. **Opis bazy danych na jednym z poziomów K0–K3.** To jedyna część, która zmienia się między wariantami eksperymentu.
+3. **Treść pytania.** Jest to dokładnie tekst z cytatu przy każdym przykładzie poniżej, np. „Wymień nazwy kawiarni w promieniu 300 metrów od Dworca Centralnego.”
+
+Model nie dostaje niczego więcej. Nie widzi punktów „Co sprawdzamy” i „Czego się spodziewamy”, zapytania wzorcowego, nazw obiektów w bazie (chyba że są w opisie bazy na K2–K3) ani błędów z poprzednich prób.
+
+Przykład pełnego promptu dla Z02 na poziomie K0 (opis bazy skrócony):
+
+```text
+Jesteś asystentem, który tłumaczy pytania w języku polskim na zapytania SQL
+dla bazy PostgreSQL 18 z rozszerzeniem PostGIS 3.6.
+
+Zwróć dokładnie jedno zapytanie SELECT w bloku ```sql ... ```, bez dodatkowych wyjaśnień.
+Nie modyfikuj danych.
+
+Obowiązujące konwencje:
+1. Obiekt należy do obszaru, jeśli się z nim przecina. W pytaniach o długość lub
+   powierzchnię „w granicach” obszaru licz tylko część leżącą wewnątrz obszaru.
+2. Każdy obiekt licz tylko raz.
+3. Pomijaj obiekty bez nazwy, zarówno w wynikach, jak i przy liczeniu.
+4. Odległości podawaj w metrach, długości w metrach lub kilometrach, powierzchnie
+   w metrach kwadratowych lub hektarach, zgodnie z pytaniem.
+
+Opis bazy danych:
+gis_osm_pois_free(fid, osm_id, code, fclass, name, geom)
+gis_osm_pois_a_free(fid, osm_id, code, fclass, name, geom)
+gis_osm_transport_free(fid, osm_id, code, fclass, name, geom)
+... (pozostałe tabele gis_osm_*)
+
+Pytanie: Wymień nazwy kawiarni w promieniu 300 metrów od Dworca Centralnego.
+```
+
+Na poziomach K1–K3 zmienia się tylko część „Opis bazy danych”. Model odpowiada blokiem ```` ```sql ```` z jednym zapytaniem. Skrypt wycina to zapytanie, wykonuje je na bazie i porównuje wynik z wynikiem zapytania wzorcowego.
 
 ### Z02: kawiarnie przy Dworcu Centralnym
 
@@ -73,86 +120,83 @@ Pytania są w wersji naturalnej (P2) z [pytania-testowe.md](pytania-testowe.md).
 
 ---
 
-## Eksperyment 2: niejasność pytań (H2)
+## Eksperyment 2: interpretacja niejasnych określeń (H2)
 
-Wszystkie pytania zadajemy na poziomie K3. Każde zwraca listę obiektów, czyli `osm_id` i nazwę. Dla S1 istnieje zapytanie wzorcowe. Dla S2 i S3 nie oceniamy poprawności, tylko:
-- powtarzalność, czyli średni indeks Jaccarda między 10 wynikami,
-- wartości przyjęte przez model, odczytane z SQL,
-- czy model zasygnalizował niejasność w polu `uwagi`.
+Sprawdzamy, czy wartość, którą model przyjmuje dla niejasnego określenia przestrzennego, zależy od kontekstu pytania. Kontekst to rodzaj szukanego obiektu i sytuacja pytającego. Punkt odniesienia jest zawsze ten sam, Dworzec Centralny, żeby różnice wynikały tylko z kontekstu.
 
-Obiekty z zadań 1 i 2 (Dworzec Centralny, PKiN, dzielnica Śródmieście) sprawdziliśmy wcześniej w bazie. Jeziora w zadaniu 3 i ewentualne obszary „centrum” na niższych poziomach administracyjnych trzeba jeszcze sprawdzić.
+### Co dokładnie dostaje model
 
-### Zadanie 1: odległość pieszo
+Tak jak w eksperymencie 1, każda próba to jedno wywołanie bez historii. Wiadomość ma trzy części:
 
-| Poziom | Pytanie |
+1. **Instrukcja zadania z eksperymentu 1** ze zmienionym formatem odpowiedzi: zamiast samego bloku SQL model zwraca JSON `{"sql": "...", "uwagi": "..."}`, gdzie `uwagi` mogą pozostać puste. Instrukcja nie wspomina o niejasności ani o założeniach, żeby nie podpowiadać modelowi, że ma je zgłaszać.
+2. **Opis bazy na poziomie K3,** czyli najpełniejszy kontekst. Dzięki temu różnice nie wynikają z błędów technicznych, np. liczenia w stopniach zamiast w metrach.
+3. **Treść pytania z tabel poniżej.** Sytuacja pytającego jest częścią pytania, np. „Idę pieszo. Wymień apteki w pobliżu Dworca Centralnego.”
+
+Każde pytanie zadajemy 10 razy. Z każdej odpowiedzi odczytujemy:
+- **przyjęty promień w metrach,** np. trzeci argument `ST_DWithin`,
+- **rodzaj interpretacji:** promień, k najbliższych obiektów (`ORDER BY ... LIMIT`), obszar administracyjny albo inny,
+- **czy model ujawnił przyjęte założenie** w polu `uwagi`.
+
+Wynikiem jest tabela: mediana promienia i jego rozrzut dla każdej kombinacji kontekstu. Poprawności nie oceniamy, więc zapytania wzorcowe nie są potrzebne.
+
+### Część 2a: określenia bez miary
+
+Pytanie ma postać: „[sytuacja] Wymień [obiekty] [określenie] Dworca Centralnego.”
+
+| Czynnik | Wartości |
 |---|---|
-| S1 jasne | Wymień apteki w promieniu 500 m od Dworca Centralnego. |
-| S2 średnio niejasne | Wymień apteki, do których dojdę w 10 minut spacerem od Dworca Centralnego. |
-| S3 bardzo niejasne | Wymień apteki w pobliżu Dworca Centralnego. |
+| Określenie | „w pobliżu”, „niedaleko” |
+| Rodzaj obiektu (rosnąca skala) | apteki, parki, szpitale, lotniska |
+| Sytuacja pytającego | brak informacji, „Idę pieszo.”, „Jadę samochodem.” |
+
+Daje to 2 × 4 × 3 = 24 pytania i 240 wywołań. Przykładowe pytania:
+
+| Sytuacja | Pytanie |
+|---|---|
+| brak informacji | Wymień apteki w pobliżu Dworca Centralnego. |
+| pieszo | Idę pieszo. Wymień apteki w pobliżu Dworca Centralnego. |
+| samochodem | Jadę samochodem. Wymień apteki w pobliżu Dworca Centralnego. |
+| brak informacji | Wymień lotniska niedaleko Dworca Centralnego. |
+| pieszo | Idę pieszo. Wymień parki niedaleko Dworca Centralnego. |
+| samochodem | Jadę samochodem. Wymień szpitale w pobliżu Dworca Centralnego. |
 
 - **Co sprawdzamy:**
-  - jaką prędkość marszu przyjmuje model w S2: 4 km/h daje ok. 670 m, 5 km/h ok. 830 m, 6 km/h 1 km,
-  - jaki promień uznaje za „w pobliżu” w S3,
-  - czy liczy w linii prostej i czy w ogóle wspomina, że prawdziwa droga pieszo jest dłuższa.
+  - czy promień rośnie razem ze skalą obiektu (apteka → lotnisko),
+  - czy rośnie przy zmianie z „pieszo” na „samochodem”,
+  - czy „w pobliżu” i „niedaleko” dostają różne wartości,
+  - jaką wartość domyślną model przyjmuje bez informacji o sytuacji pytającego.
 - **Czego się spodziewamy:**
-  - **S1:** Jaccard ≈ 1.
-  - **S2:** model przeliczy czas na odległość, prawdopodobnie zawsze tak samo, np. 800 m, i bez komentarza.
-  - **S3:** jedna okrągła wartość, 500 m albo 1 km. Wyniki będą powtarzalne, ale pytający nie wie, jaki promień przyjęto.
+  - **Sytuacja pytającego:** wyraźny efekt. „Samochodem” daje promień kilka razy większy niż „pieszo”, bo kontekst jest podany wprost.
+  - **Rodzaj obiektu:** słabszy efekt. Lotniska prawdopodobnie dostaną większy promień, ale apteki, parki i szpitale mogą dostać tę samą wartość, np. 1 km.
+  - **Bez informacji o sytuacji:** okrągła wartość, 500 m albo 1 km, najczęściej bez wzmianki w polu `uwagi`.
+  - **Lotniska:** możliwa zmiana interpretacji z promienia na „k najbliższych”, bo w promieniu kilometra lotniska nie ma. To też jest ciekawy wynik.
+- **Jak rozstrzygamy H2:**
+  - promień zależy od obu czynników, czyli H2 potwierdzona,
+  - zależy tylko od sytuacji pytającego, czyli potwierdzona częściowo,
+  - nie zależy od żadnego, czyli H2 obalona.
 
-  Taki wynik potwierdza H2 przez ukryte wartości domyślne, a nie przez losowość.
+### Część 2b: miara czasu do przeliczenia
 
-### Zadanie 2: niejasny obszar
-
-| Poziom | Pytanie |
+| Sytuacja | Pytanie |
 |---|---|
-| S1 jasne | Wymień kawiarnie w dzielnicy Śródmieście. |
-| S2 średnio niejasne | Wymień kawiarnie w ścisłym centrum Warszawy. |
-| S3 bardzo niejasne | Wymień kawiarnie w centrum. |
+| brak informacji | Wymień szpitale, do których dotrę w 15 minut od Dworca Centralnego. |
+| pieszo | Idę pieszo. Wymień szpitale, do których dotrę w 15 minut od Dworca Centralnego. |
+| rowerem | Jadę rowerem. Wymień szpitale, do których dotrę w 15 minut od Dworca Centralnego. |
+| samochodem | Jadę samochodem. Wymień szpitale, do których dotrę w 15 minut od Dworca Centralnego. |
 
-- **Co sprawdzamy:** jak model definiuje „centrum”, gdy nie ma jednej oczywistej geometrii. Możliwości:
-  - granica dzielnicy Śródmieście,
-  - promień wokół PKiN (jaki?),
-  - mniejsza jednostka administracyjna, np. Śródmieście Północne, jeśli jest w danych,
-  - prostokąt ze współrzędnymi z pamięci.
-
-  W S3 brakuje nawet nazwy miasta. Sprawdzamy, czy model założy Warszawę.
-- **Czego się spodziewamy:**
-  - **S1:** Jaccard ≈ 1.
-  - **S2 i S3:** różne podejścia w kolejnych powtórzeniach, więc niski Jaccard. To zadanie jest głównym kandydatem do potwierdzenia H2.
-
-  Spodziewamy się, że model nie zaznaczy niejasności i za każdym razem zwróci zapytanie bez zastrzeżeń.
-
-### Zadanie 3: czas dojazdu poza miasto
-
-| Poziom | Pytanie |
-|---|---|
-| S1 jasne | Wymień jeziora położone do 60 km od granicy Warszawy. |
-| S2 średnio niejasne | Wymień jeziora, do których dojadę z Warszawy samochodem w godzinę. |
-| S3 bardzo niejasne | Wymień jeziora niedaleko Warszawy. |
+Daje to 4 pytania i 40 wywołań.
 
 - **Co sprawdzamy:**
-  - jaką prędkość przyjmuje model w S2 (50, 60, 80 km/h?),
-  - od czego liczy odległość: od granicy miasta, od jego środka czy od PKiN,
-  - czy zauważy, że bez sieci dróg czasu dojazdu nie da się policzyć dokładnie.
-
-  Jest to przypadek, o który pytał opiekun („coś, do czego moglibyśmy dojechać z Warszawy w godzinę”).
+  - jaką prędkość przyjmuje model dla każdego środka transportu (prędkość = promień / 15 minut),
+  - jaki środek transportu zakłada, gdy pytający go nie podał,
+  - czy uwzględnia, że droga jest dłuższa niż linia prosta, np. przez współczynnik krętości dróg,
+  - czy zaznacza, że bez sieci dróg nie da się dokładnie policzyć czasu dojazdu.
 - **Czego się spodziewamy:**
-  - **S2:** promień 50–80 km, liczony od różnych punktów odniesienia, więc Jaccard średni.
-  - **S3:** okrągła wartość, np. 30 km albo 50 km.
+  - promień ok. 1,2 km pieszo (5 km/h), ok. 4 km rowerem (15 km/h) i 7,5–12,5 km samochodem (30–50 km/h w mieście),
+  - bez informacji o środku transportu najpewniej założy chodzenie pieszo,
+  - ograniczenie wynikające z braku sieci dróg wspomni rzadko.
 
-  Dane obejmują tylko województwo mazowieckie, więc przy dużym promieniu wyniki będą ucięte granicą województwa. Trzeba to opisać jako ograniczenie, ale nie wpływa to na porównanie między powtórzeniami.
+### Do sprawdzenia w bazie przed uruchomieniem
 
-### Kandydaci na zadania 4 i 5
-
-- **Niejasna cecha obiektu:**
-  - S1: „parki w Warszawie o powierzchni ponad 20 ha”,
-  - S2: „duże parki w Warszawie”,
-  - S3: „parki w Warszawie na długi spacer”.
-
-  Sprawdza niejasność, która nie dotyczy odległości.
-- **Niejasność przy mało znanym obiekcie:**
-  - S1: „przystanki autobusowe do 300 m od Skweru Jolanty Brzeskiej”,
-  - S2: „5 minut pieszo od…”,
-  - S3: „blisko…”.
-
-  Sprawdza, czy przy obiekcie, którego model nie zna, przyjmuje te same wartości domyślne co przy Dworcu Centralnym.
+- **Lotniska:** czy są w danych pod `fclass = 'airport'` (w `gis_osm_transport_free` albo `gis_osm_transport_a_free`) i czy jest tam Lotnisko Chopina.
+- **Liczba obiektów każdego rodzaju w okolicy dworca:** apteki, parki i szpitale. Jeśli w jakimś promieniu nie ma ani jednego obiektu, model może zmienić interpretację, a my chcemy to umieć odróżnić.
