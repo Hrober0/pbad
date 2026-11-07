@@ -152,19 +152,19 @@ Fakty pochodzą z „Ustaleń dotyczących danych” w [pytania-testowe.md](pyta
 - Obiekty bez nazwy mają w kolumnie name pusty napis '', a nie NULL.
 - Nazwy ulic i obiektów nie są unikalne w województwie (np. ulica Marszałkowska
   występuje w kilku miejscowościach).
-- Dworzec Centralny jest zapisany jako 'Warszawa Centralna' (fclass = 'railway_station').
-  Stadion Narodowy jest zapisany jako 'PGE Narodowy' (gis_osm_pois_a_free, fclass = 'stadium').
+- Nazwy w kolumnie name pochodzą z OpenStreetMap i mogą różnić się od nazw potocznych,
+  używanych w pytaniach.
 - Większość kościołów ma fclass = 'christian', a nie 'christian_catholic'.
 ```
 
-**Uwaga do dwóch ostatnich faktów:** podają one nazwy z bazy dla dwóch obiektów z pytań testowych. To uczciwe, bo prawdziwy system też miałby słownik takich nazw, ale ułatwia znane obiekty w porównaniu z [MZ]. Do decyzji: można je usunąć i zostawić modelowi dopasowanie nazwy, np. przez `ILIKE`.
+Fakty opisują dane jako całość i żaden z nich nie podaje nazwy obiektu, o który pytamy w pytaniach testowych. Inaczej K2 dawałoby gotową odpowiedź na część pytań, a przyrost trafności K1 → K2 byłby zawyżony. Samo dopasowanie nazwy jest czynnością przy pisaniu zapytania, więc wskazówka o tym jest dopiero w K3.
 
 **Co model zyskuje względem K1:**
 - zna wartości `fclass`, więc wie, że apteka to `'pharmacy'`, a kościół to `'christian'`,
 - wie o rozdzieleniu punktów i poligonów, o granicy Warszawy i o pustych nazwach,
-- wie o obiektach, których nazwy w bazie różnią się od potocznych.
+- wie, że nazwy w bazie mogą różnić się od potocznych, ale nie dostaje gotowej nazwy żadnego obiektu z pytań.
 
-**Rola w eksperymencie:** główny poziom dla hipotezy H1. Przyrost trafności K1 → K2 mierzy wpływ opisu zawartości danych. Według H1 ma być większy niż przyrost K0 → K1 (opis struktury) i K2 → K3 (wskazówki i przykłady).
+**Rola w eksperymencie:** główny poziom dla hipotezy H1. Przyrost trafności K1 → K2 mierzy wpływ opisu zawartości danych. Według H1 ma być większy niż przyrost K0 → K1 (opis struktury) i K2 → K3 (wskazówki i przykłady). K2 jest też stałym poziomem kontekstu w eksperymencie 2 (H2), bo w prompcie nie ma wtedy żadnej gotowej wartości promienia.
 
 **Rozmiar:** ok. 4–5 tys. tokenów, z czego większość to lista `fclass`.
 
@@ -187,6 +187,8 @@ Fakty pochodzą z „Ustaleń dotyczących danych” w [pytania-testowe.md](pyta
 - Aby pominąć obiekty bez nazwy, użyj warunku name <> ''.
 - Aby liczyć każdy obiekt raz, użyj COUNT(DISTINCT osm_id).
 - Obiekty referencyjne wybieraj z bazy po nazwie. Nie wpisuj współrzędnych ręcznie.
+- Nazwa w bazie może różnić się od nazwy z pytania, więc dopasowuj po fragmencie,
+  np. name ILIKE '%Centralna%', a nie przez równość.
 - Zawężaj wyniki do Warszawy przez przecięcie z jej granicą, bo dane obejmują całe województwo.
 ```
 
@@ -260,7 +262,6 @@ W prompcie przykłady podajemy bez komentarzy `-- wynik`. Wyniki zapisaliśmy tu
 - Przyrost trafności K2 → K3 mierzy wpływ wskazówek i przykładów zapytań. Jest jednym z dwóch przyrostów, z którymi H1 porównuje przyrost K1 → K2.
 - Pokazuje, czy model sam przekłada fakty o danych na poprawny SQL, czy potrzebuje wzorców.
 - K3 to też górna granica tego, co da się osiągnąć samym kontekstem przy prostej architekturze.
-- Jest stałym poziomem kontekstu w eksperymencie 2 (H2).
 
 **Rozmiar:** ok. 6–7 tys. tokenów.
 
@@ -278,7 +279,7 @@ W prompcie przykłady podajemy bez komentarzy `-- wynik`. Wyniki zapisaliśmy tu
 | Ten sam typ obiektu w `pois` i `pois_a` | – | – | ✓ fakt | ✓ wskazówka + przykład |
 | Granica Warszawy w `adminareas` | – | – | ✓ | ✓ + przykład |
 | Pusta nazwa to `''`, a nie NULL | – | – | ✓ fakt | ✓ wskazówka + przykład |
-| Nazwy w bazie inne niż potoczne | – | – | ✓ (2 obiekty) | ✓ |
+| Nazwy w bazie inne niż potoczne | – | – | ✓ fakt | ✓ + wskazówka (ILIKE) |
 | Nazwy nieunikalne w województwie | – | – | ✓ fakt | ✓ wskazówka |
 | Pobieranie obiektu z bazy zamiast wpisanych współrzędnych | – | – | – | ✓ wskazówka + przykład |
 

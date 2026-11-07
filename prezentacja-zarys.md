@@ -37,9 +37,10 @@
 ### 3. Hipotezy (ok. 40 s)
 
 - **H1:** Opis zawartości danych poprawia trafność zapytań przestrzennych SQL bardziej niż opis struktury bazy danych oraz wskazówki i przykłady zapytań.
-- **H2:** Model interpretuje niejasne określenia przestrzenne zależnie od kontekstu pytania, dopasowując przyjęte wartości do rodzaju szukanego obiektu oraz do sytuacji pytającego.
+- **H2:** Model interpretuje niejasne określenia przestrzenne zależnie od kontekstu pytania. Zmiana opisu sytuacji pytającego, miejsca albo rodzaju szukanego obiektu zmienia wartość, którą model przyjmuje dla tego samego określenia.
 - **Do powiedzenia:**
   - trafność to odsetek zapytań, które zwracają taki sam wynik jak zapytanie wzorcowe,
+  - w H2 samo określenie („w pobliżu”) jest stałe, a zmieniamy kontekst wokół niego,
   - H2 może wyjść w obie strony: model może rozsądnie skalować promień albo zawsze wpisywać to samo.
 
 ### 4. Narzędzia badawcze (ok. 40 s)
@@ -50,7 +51,7 @@
   - klasyfikacja błędów, np. zła tabela albo liczenie w stopniach zamiast w metrach.
 - **Eksperyment 2:**
   - odczyt przyjętego promienia z SQL,
-  - mediana i rozrzut z 10 powtórzeń,
+  - rozrzut przyjętych wartości między powtórzeniami,
   - klasyfikacja rodzaju interpretacji: promień, k najbliższych albo obszar.
 - **Zestaw pytań testowych** w 5 kategoriach zapytań przestrzennych (NALSpatial, GS-SQL).
 - **Opcjonalnie:** ankieta wśród ludzi jako punkt odniesienia dla H2.
@@ -88,9 +89,9 @@
 - **Przykład:** „Jaki szpital jest najbliżej PKiN?”. W bazie jest 7 szpitali zapisanych jako punkty i 37 jako poligony. Zapytanie tylko po punktach działa, ale zwraca zły szpital.
 
 **Eksperyment 2 (H2):**
-- Te same pytania z różnym kontekstem, np. „Idę pieszo / Jadę samochodem. Wymień apteki / lotniska w pobliżu Dworca Centralnego.”
-- 28 pytań × 10 powtórzeń = 280 wywołań.
-- **Potwierdzenie H2:** promień rośnie dla większych obiektów i szybszych środków transportu.
+- Stałe określenie „w pobliżu”, a zmieniamy opis sytuacji pytającego, miejsce i rodzaj obiektu, np. „Idę pieszo / Jadę samochodem. Wymień apteki w pobliżu Dworca Centralnego.”
+- 29 pytań × 3 powtórzenia = 87 wywołań, w czterech częściach: „w pobliżu”, czas dojazdu, „w centrum”, „duże” i „małe”.
+- **Potwierdzenie H2:** promień rośnie przy szybszym środku transportu, w okolicy o mniejszej gęstości obiektów albo przy obiekcie większej skali.
 
 **Grafika:** dwa puste wykresy na wyniki:
 - trafność na czterech poziomach,

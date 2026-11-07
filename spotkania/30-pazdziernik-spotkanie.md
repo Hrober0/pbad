@@ -10,7 +10,7 @@
   - coś niedaleko
   - coś, do czego moglibyśmy dojechać z Warszawy w godzinę
 
-- możliwe, że trzeba będzie trochę zmienić nasze [pytania testowe](../eksperyment/pytania-testowe.md)
+- możliwe, że trzeba będzie trochę zmienić nasze [pytania testowe](../eksperyment/draft/pytania-testowe.md)
 
 - z badanych przykładów raczej wybierzemy te, które pozwolą nam coś przedstawić - pewnie nie będziemy pisać o wszystkich, 40 (każde z 3ma wariantami) to za dużo
 
