@@ -1,107 +1,127 @@
-# Zarys prezentacji: etap formalny (termin 8.11)
+# Zarys prezentacji: etap formalny
 
-Kolejność slajdów odpowiada sekcjom w [informacje-ogolne.md](informacje-ogolne.md), bo ten plik powstał według wymagań etapu. Nie znamy limitu czasu, więc zarys zakłada ok. 10–12 slajdów na ok. 10 minut. Jeśli limit jest krótszy, slajdy 4 i 11 można połączyć z sąsiednimi.
+**Wymagania:**
+- 5 minut,
+- wysłanie do opiekuna najpóźniej **09.11**,
+- prezentacja na Teams.
 
----
+7 slajdów, ok. 40 sekund na slajd. Każdy slajd odpowiada jednemu punktowi z wytycznych, w tej samej kolejności:
 
-### 1. Tytuł
-
-- Roboczy tytuł: *„Schemat to za mało? Wpływ kontekstu bazy danych i niejasności pytań na generowanie przestrzennego SQL przez LLM”*.
-- Autorzy, opiekun, przedmiot, data.
-
-### 2. Problem i motywacja
-
-- Użytkownik pyta językiem naturalnym („gdzie jest apteka niedaleko dworca?”), a LLM ma to przetłumaczyć na SQL z funkcjami PostGIS.
-- LLM słabo liczy relacje przestrzenne samodzielnie (praca 11), więc liczenie zostawiamy bazie, a model tylko tłumaczy pytanie.
-- Dwa problemy:
-  1. Model nie zna danych.
-  2. Pytania ludzi są nieprecyzyjne.
-- **Grafika:** prosty schemat przepływu: pytanie → LLM (+ kontekst) → SQL → PostGIS → wynik.
-
-### 3. Stan wiedzy (krótko)
-
-- Text-to-SQL ma długą historię: reguły, potem sieci neuronowe, teraz LLM (praca 12).
-- Sposób opisania bazy w prompcie wpływa na wynik, ale więcej nie zawsze znaczy lepiej (DAIL-SQL, Monkuu).
-- Poprawna składnia nie oznacza poprawnego wyniku (GeoSQL-Eval).
-- Modele trzymają się jednej interpretacji niejasnych pytań (AmbiQT).
-- **Luka:** mało badań na nowszych modelach (głównie GPT-4) i mało badań nad niejasnością w pytaniach przestrzennych.
-
-### 4. Cel badania
-
-- Sprawdzić, jakie informacje o bazie warto przekazać modelowi.
-- Sprawdzić, na ile można polegać na jego interpretacji niejasnych pytań.
-- Treść: sekcja „Cel badania” z [informacje-ogolne.md](informacje-ogolne.md).
-
-### 5. Hipotezy
-
-- **H1:** Opis tego, co zawierają dane, poprawia trafność zapytań bardziej niż sam opis struktury bazy.
-- **H2:** Im bardziej niejasne jest pytanie, tym bardziej wynik zależy od założeń, które model przyjmuje samodzielnie i nie ujawnia pytającemu, przez co wynik staje się dla pytającego nieprzewidywalny.
-- Uwaga do powiedzenia: nieprzewidywalność może wynikać z losowości, czyli różnych wyników przy powtórzeniach, albo z ukrytej wartości domyślnej. Eksperyment pokaże, który przypadek występuje.
-
-### 6. Dane i środowisko
-
-- OSM z Geofabrik dla Mazowsza, PostgreSQL + PostGIS w Dockerze, Claude przez API.
-- **Ciekawostki z danych, które są jednocześnie pułapkami dla modelu:**
-  - 7 szpitali w Warszawie zapisano jako punkty, a 37 jako poligony,
-  - Dworzec Centralny nazywa się w bazie „Warszawa Centralna”,
-  - brak nazwy to `''`, a nie NULL,
-  - w województwie jest kilka ulic Marszałkowskich.
-- **Grafika:** zrzut tabel w DataGrip albo mapa Warszawy z QGIS.
-
-### 7. Eksperyment 1: poziomy kontekstu
-
-- Tabela K0–K3, ale opisana słowami: same nazwy → struktura z typami → opis zawartości danych → wskazówki i przykłady.
-- 20 pytań w 5 kategoriach (zakresowe, najbliżsi sąsiedzi, złączenia, agregacje, pomiary) × 4 poziomy × 3 powtórzenia = 240 wywołań.
-- Poprawność oceniamy, porównując wynik z wynikiem zapytania wzorcowego, a nie tekst SQL.
-
-### 8. Przykład: „działa” to nie to samo co „jest poprawne”
-
-- Pytanie N01: „Jaki szpital jest najbliżej Pałacu Kultury i Nauki?”
-- **Wariant błędny:** zapytanie przeszukuje tylko punkty. Wykonuje się i zwraca sensownie wyglądający, ale zły szpital.
-- **Wariant poprawny:** zapytanie łączy punkty i poligony.
-- **Grafika:** dwa krótkie zapytania SQL obok siebie i mapka z dwoma wynikami.
-- Opcjonalnie para „znany i mało znany obiekt” (PKiN i Skwer Jolanty Brzeskiej): czy model wpisuje współrzędne z pamięci?
-
-### 9. Eksperyment 2: niejasność pytań
-
-- Tabela S1–S3 na przykładzie aptek przy Dworcu Centralnym: „do 500 m” / „10 minut spacerem” / „w pobliżu”.
-- Dwa pozostałe przykłady w jednym zdaniu każdy: „w centrum” (niejasny obszar) i „godzina jazdy autem” (czas zamiast odległości).
-- 5 zadań × 3 poziomy × 10 powtórzeń = 150 wywołań, na stałym, pełnym kontekście.
-- Mierzymy:
-  - powtarzalność (indeks Jaccarda),
-  - przyjęte wartości (np. promień),
-  - czy model sygnalizuje niejasność.
-
-### 10. Zmienne i oczekiwane wyniki
-
-- **Lewa kolumna, zmienne:** zmieniamy poziom kontekstu i stopień niejasności; mierzymy odsetek poprawnych zapytań, rodzaje błędów, Jaccard i przyjęte wartości; stałe są model, ustawienia i instrukcja.
-- **Prawa kolumna, oczekiwane wyniki:**
-  - największy skok poprawności po dodaniu opisu danych,
-  - przy niejasnych pytaniach powtarzalne, ale ukryte wartości domyślne, np. „w pobliżu” = 500 m.
-- Każdy wynik, także obalający hipotezę, da się opisać.
-
-### 11. Ryzyka
-
-Wybieramy 4–5 najważniejszych z sekcji „Ryzyka”:
-- błędy w zapytaniach wzorcowych (rozwiązanie: weryfikacja przez drugą osobę),
-- mała próba, więc wyniki opisowe z przedziałami ufności,
-- jakość danych OSM,
-- model może znać schemat Geofabrik,
-- pole `uwagi` może wpływać na zachowanie modelu.
-
-### 12. Plan prac i podział zadań
-
-- **Oś czasu:**
-  - zrobione: przegląd literatury, dane, pytania testowe,
-  - teraz: zapytania wzorcowe i skrypt do uruchamiania testów,
-  - 13.11: pilotaż na spotkaniu z opiekunem,
-  - dalej: pełne eksperymenty, analiza, szkic artykułu.
-- Kto za co odpowiada (do uzupełnienia na spotkaniu).
+| Punkt z wytycznych | Slajd |
+|---|---|
+| Kontekst | 1 |
+| Co już wiadomo z badań literatury? | 2 |
+| Jaka jest hipoteza? | 3 |
+| Jakie narzędzia badawcze? | 4 |
+| Jakie narzędzia informatyczne? Co wymaga poznania/napisania? | 5 |
+| Plan eksperymentu/ów | 6 |
+| Dalsze kroki (jaki harmonogram prac?) | 7 |
 
 ---
 
-## Do ustalenia na spotkaniu
+### 1. Kontekst (ok. 40 s)
 
-- Limit czasu i wymagany format prezentacji (czy jest szablon wydziałowy?).
-- Podział slajdów między osoby.
-- Czy na slajdzie 8 pokazujemy prawdziwy wynik z Claude. Wymaga to choćby jednego wywołania API przed 8.11, co byłoby mocnym punktem prezentacji.
+- Roboczy tytuł: *„Schemat to za mało? Kontekst bazy danych i niejasne pytania przy generowaniu przestrzennego SQL przez LLM”*. Autorzy, opiekun, przedmiot.
+- Użytkownik pyta językiem naturalnym, np. „gdzie jest apteka niedaleko dworca?”. LLM tłumaczy pytanie na SQL z funkcjami PostGIS, a obliczenia przestrzenne wykonuje baza.
+- **Grafika:** schemat przepływu: pytanie → LLM (+ opis bazy) → SQL → PostGIS → wynik.
+- **Do powiedzenia:** są dwa problemy. Model nie zna naszych danych, a ludzie pytają nieprecyzyjnie. Badamy oba.
+
+### 2. Co już wiadomo z badań literatury (ok. 40 s)
+
+- LLM słabo liczą relacje przestrzenne samodzielnie, więc lepiej, żeby tłumaczyły pytanie na zapytanie, a liczyła baza (praca 11).
+- Sposób opisu bazy w prompcie wpływa na poprawność SQL, ale więcej informacji nie zawsze daje lepszy wynik (DAIL-SQL, Monkuu, praca 12).
+- Poprawna składnia nie oznacza poprawnego wyniku, więc oceniamy wyniki zapytań, a nie ich tekst (GeoSQL-Eval).
+- Przy niejasnym pytaniu modele trzymają się jednej interpretacji (AmbiQT).
+- **Luka:** badania dotyczą głównie GPT-4 i nie rozdzielają wpływu różnych rodzajów informacji o bazie. Nie wiadomo też, czy interpretacja niejasnych określeń przestrzennych zależy od kontekstu.
+
+### 3. Hipotezy (ok. 40 s)
+
+- **H1:** Opis zawartości danych poprawia trafność zapytań przestrzennych SQL bardziej niż opis struktury bazy danych oraz wskazówki i przykłady zapytań.
+- **H2:** Model interpretuje niejasne określenia przestrzenne zależnie od kontekstu pytania, dopasowując przyjęte wartości do rodzaju szukanego obiektu oraz do sytuacji pytającego.
+- **Do powiedzenia:**
+  - trafność to odsetek zapytań, które zwracają taki sam wynik jak zapytanie wzorcowe,
+  - H2 może wyjść w obie strony: model może rozsądnie skalować promień albo zawsze wpisywać to samo.
+
+### 4. Narzędzia badawcze (ok. 40 s)
+
+- **Eksperyment porównawczy:** zmieniamy jeden czynnik, a resztę utrzymujemy stałą. Każda próba to jedno wywołanie modelu bez historii.
+- **Eksperyment 1:**
+  - trafność względem zapytań wzorcowych, czyli porównanie wyników, a nie tekstu SQL,
+  - klasyfikacja błędów, np. zła tabela albo liczenie w stopniach zamiast w metrach.
+- **Eksperyment 2:**
+  - odczyt przyjętego promienia z SQL,
+  - mediana i rozrzut z 10 powtórzeń,
+  - klasyfikacja rodzaju interpretacji: promień, k najbliższych albo obszar.
+- **Zestaw pytań testowych** w 5 kategoriach zapytań przestrzennych (NALSpatial, GS-SQL).
+- **Opcjonalnie:** ankieta wśród ludzi jako punkt odniesienia dla H2.
+
+### 5. Narzędzia informatyczne (ok. 40 s)
+
+**Mamy:**
+- dane OSM z Geofabrik dla Mazowsza,
+- PostgreSQL 18 + PostGIS 3.6 w Dockerze,
+- import przez `ogr2ogr` (GDAL),
+- DataGrip i QGIS do podglądu danych.
+
+**Do poznania:**
+- Claude API:
+  - ustawienia modelu,
+  - odpowiedź w ustalonym formacie (JSON),
+  - liczenie tokenów.
+- Funkcje PostGIS dla odległości w metrach (`geography`).
+
+**Do napisania (Python):**
+- generator opisu bazy na poziomach K0–K3,
+- skrypt uruchamiający testy i zapisujący odpowiedzi,
+- porównywanie wyników z wzorcem,
+- odczyt promienia z SQL,
+- wykresy.
+
+**Do przygotowania ręcznie:** zapytania wzorcowe do 20 pytań.
+
+### 6. Plan eksperymentów (ok. 50 s)
+
+**Eksperyment 1 (H1):**
+- Cztery poziomy kontekstu, każdy dodaje jeden rodzaj informacji: same nazwy tabel → + opis struktury → + opis zawartości danych → + wskazówki i przykłady.
+- 20 pytań × 4 poziomy × 3 powtórzenia = 240 wywołań.
+- **Potwierdzenie H1:** największy przyrost trafności daje opis zawartości danych.
+- **Przykład:** „Jaki szpital jest najbliżej PKiN?”. W bazie jest 7 szpitali zapisanych jako punkty i 37 jako poligony. Zapytanie tylko po punktach działa, ale zwraca zły szpital.
+
+**Eksperyment 2 (H2):**
+- Te same pytania z różnym kontekstem, np. „Idę pieszo / Jadę samochodem. Wymień apteki / lotniska w pobliżu Dworca Centralnego.”
+- 28 pytań × 10 powtórzeń = 280 wywołań.
+- **Potwierdzenie H2:** promień rośnie dla większych obiektów i szybszych środków transportu.
+
+**Grafika:** dwa puste wykresy na wyniki:
+- trafność na czterech poziomach,
+- promień dla obiektów, osobno dla „pieszo” i „samochodem”.
+
+### 7. Dalsze kroki i harmonogram (ok. 30 s)
+
+| Termin | Zadanie |
+|---|---|
+| zrobione | przegląd literatury, baza z danymi, pytania testowe, opis poziomów kontekstu |
+| do 09.11 | wysłanie prezentacji |
+| do 13.11 | zapytania wzorcowe dla części pytań, pierwsza wersja skryptu, **pilotaż** na kilku pytaniach |
+| 13.11 | spotkanie z opiekunem: wyniki pilotażu |
+| do 27.11 | wszystkie zapytania wzorcowe, pełne eksperymenty 1 i 2 |
+| do 11.12 | analiza wyników, wykresy, szkic artykułu |
+| dalej | poprawki artykułu po uwagach opiekuna |
+
+Terminy po 13.11 to nasza propozycja do potwierdzenia z opiekunem.
+
+Na tym slajdzie albo w notatkach podajemy podział zadań w zespole.
+
+---
+
+## Ryzyka
+
+Wytyczne nie wymagają osobnego slajdu o ryzykach. Jeśli padnie pytanie, odpowiadamy na podstawie sekcji „Ryzyka” w [informacje-ogolne.md](informacje-ogolne.md). Dwa najważniejsze:
+- błędy w zapytaniach wzorcowych, które ogranicza weryfikacja przez drugą osobę,
+- mała próba, więc wyniki pokażemy opisowo.
+
+## Do ustalenia
+
+- **Termin:** w notatce ze spotkania 30.10 jest 8 listopada, a w wytycznych 09.11. Bezpieczniej wysłać do 8.11.
+- Kto prezentuje które slajdy.
+- **Czy na slajdzie 6 pokazujemy prawdziwą odpowiedź Claude.** Wystarczy jedno wywołanie API przed wysłaniem prezentacji, a byłby to mocny punkt.
