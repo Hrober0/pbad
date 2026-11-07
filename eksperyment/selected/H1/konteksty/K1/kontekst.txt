@@ -1,0 +1,195 @@
+Struktura bazy danych:
+
+CREATE TABLE gis_osm_adminareas_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_buildings_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    type varchar(20),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_landuse_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_natural_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_natural_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_places_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    population integer,
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_places_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    population integer,
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_pofw_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_pofw_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_pois_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_pois_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_protected_areas_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_railways_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    layer integer,
+    bridge varchar(1),
+    tunnel varchar(1),
+    geom geometry(LineString, 4326)
+);
+
+CREATE TABLE gis_osm_roads_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    ref varchar(20),
+    oneway varchar(1),
+    maxspeed integer,
+    layer integer,
+    bridge varchar(1),
+    tunnel varchar(1),
+    geom geometry(LineString, 4326)
+);
+
+CREATE TABLE gis_osm_traffic_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    calming varchar(30),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_traffic_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    calming varchar(30),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_transport_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_transport_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_water_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_waterways_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    width integer,
+    name varchar(100),
+    geom geometry(LineString, 4326)
+);

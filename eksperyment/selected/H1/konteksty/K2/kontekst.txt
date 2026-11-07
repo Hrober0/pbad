@@ -1,0 +1,281 @@
+Struktura bazy danych:
+
+CREATE TABLE gis_osm_adminareas_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_buildings_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    type varchar(20),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_landuse_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_natural_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_natural_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_places_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    population integer,
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_places_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    population integer,
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_pofw_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_pofw_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_pois_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_pois_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_protected_areas_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_railways_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    layer integer,
+    bridge varchar(1),
+    tunnel varchar(1),
+    geom geometry(LineString, 4326)
+);
+
+CREATE TABLE gis_osm_roads_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    ref varchar(20),
+    oneway varchar(1),
+    maxspeed integer,
+    layer integer,
+    bridge varchar(1),
+    tunnel varchar(1),
+    geom geometry(LineString, 4326)
+);
+
+CREATE TABLE gis_osm_traffic_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    calming varchar(30),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_traffic_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    calming varchar(30),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_transport_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_transport_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(Point, 4326)
+);
+
+CREATE TABLE gis_osm_water_a_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    name varchar(100),
+    geom geometry(MultiPolygon, 4326)
+);
+
+CREATE TABLE gis_osm_waterways_free (
+    fid integer PRIMARY KEY,
+    osm_id varchar(12),
+    code integer,
+    fclass varchar(28),
+    width integer,
+    name varchar(100),
+    geom geometry(LineString, 4326)
+);
+
+Opis tabel:
+- gis_osm_adminareas_a_free: granice administracyjne. fclass określa poziom: admin_level4 = województwo, admin_level6 = powiat lub miasto na prawach powiatu, admin_level9 = dzielnica Warszawy; pozostałe poziomy to jednostki pośrednie (gminy, miejscowości) i mniejsze (osiedla).
+- gis_osm_buildings_a_free: obrysy budynków.
+- gis_osm_landuse_a_free: użytkowanie terenu, np. parki, lasy, cmentarze, tereny mieszkaniowe i przemysłowe.
+- gis_osm_natural_free, gis_osm_natural_a_free: obiekty przyrodnicze, np. drzewa, szczyty, źródła.
+- gis_osm_places_free, gis_osm_places_a_free: miejscowości i nazwy miejsc, np. miasta, wsie, przysiółki, osiedla. Punkt miejscowości leży zwykle w jej centrum.
+- gis_osm_pofw_free, gis_osm_pofw_a_free: miejsca kultu religijnego; fclass oznacza wyznanie.
+- gis_osm_pois_free, gis_osm_pois_a_free: usługi i obiekty użyteczności publicznej, np. sklepy, gastronomia, szkoły, apteki, szpitale, atrakcje turystyczne.
+- gis_osm_protected_areas_a_free: obszary chronione, np. rezerwaty przyrody.
+- gis_osm_railways_free: linie kolejowe, tramwajowe i metra.
+- gis_osm_roads_free: drogi, ulice i ścieżki, od autostrad po chodniki.
+- gis_osm_traffic_free, gis_osm_traffic_a_free: infrastruktura ruchu, np. parkingi, stacje paliw, sygnalizacja świetlna, przejścia dla pieszych.
+- gis_osm_transport_free, gis_osm_transport_a_free: przystanki i stacje transportu publicznego oraz lotniska.
+- gis_osm_water_a_free: wody powierzchniowe, np. jeziora, zbiorniki, koryta rzek, mokradła.
+- gis_osm_waterways_free: cieki wodne jako linie, np. rzeki, kanały, strumienie.
+
+Tabele z "_a" w nazwie zawierają obiekty narysowane w OpenStreetMap jako obszar (poligony), np. restauracja zaznaczona obrysem budynku. Tabele bez "_a" zawierają obiekty narysowane jako punkt, a roads, railways i waterways jako linie.
+
+Opis kolumn:
+- fid: identyfikator wiersza w tabeli.
+- osm_id: identyfikator obiektu w OpenStreetMap. Nie zawsze jest unikalny, bo jeden obiekt OSM może dać kilka geometrii.
+- code: czterocyfrowy kod typu obiektu; pierwsze cyfry oznaczają warstwę, ostatnie typ w warstwie. Niesie tę samą informację co fclass.
+- fclass: typ obiektu, np. 'pharmacy', 'tram_stop', 'park'. Dopuszczalne wartości są wymienione niżej.
+- name: nazwa lokalna obiektu, czyli taka jak na tablicy, po polsku. Jest pusta, gdy obiekt nie ma nazwy albo nazwa w OSM była oczywiście błędna.
+- geom: geometria obiektu w układzie EPSG:4326 (długość i szerokość geograficzna w stopniach).
+- gis_osm_buildings_a_free.type: rodzaj budynku z OpenStreetMap; zwykle pusty.
+- gis_osm_places_free.population, gis_osm_places_a_free.population: liczba mieszkańców; 0 oznacza brak danych.
+- gis_osm_roads_free.ref: numer drogi, np. '79'.
+- gis_osm_roads_free.oneway: 'B' = ruch w obu kierunkach, 'F' = jednokierunkowa zgodnie z kierunkiem linii, 'T' = jednokierunkowa przeciwnie do kierunku linii.
+- gis_osm_roads_free.maxspeed: dopuszczalna prędkość w km/h; 0 oznacza brak danych.
+- gis_osm_roads_free.layer, gis_osm_railways_free.layer: poziom względem terenu, od -5 do 5 (tunele ujemne, wiadukty dodatnie).
+- gis_osm_roads_free.bridge, gis_osm_railways_free.bridge: 'T' = odcinek na moście, 'F' = nie.
+- gis_osm_roads_free.tunnel, gis_osm_railways_free.tunnel: 'T' = odcinek w tunelu, 'F' = nie.
+- gis_osm_traffic_free.calming, gis_osm_traffic_a_free.calming: rodzaj elementu uspokojenia ruchu, np. 'bump', 'hump'; zwykle pusty.
+- gis_osm_waterways_free.width: szerokość cieku w metrach; 0 oznacza brak danych.
+
+Dopuszczalne wartości fclass:
+- gis_osm_adminareas_a_free.fclass: admin_level10, admin_level11, admin_level4, admin_level6, admin_level7, admin_level8, admin_level9
+- gis_osm_buildings_a_free.fclass: building
+- gis_osm_landuse_a_free.fclass: allotments, cemetery, commercial, farmland, farmyard, forest, grass, heath, industrial, landfill, meadow, military, orchard, park, quarry, recreation_ground, residential, retail, scrub, vineyard
+- gis_osm_natural_a_free.fclass: beach, cave_entrance, cliff, spring
+- gis_osm_natural_free.fclass: beach, cave_entrance, peak, spring, tree
+- gis_osm_places_a_free.fclass: farm, hamlet, island, locality, suburb, village
+- gis_osm_places_free.fclass: city, hamlet, island, locality, national_capital, suburb, town, village
+- gis_osm_pofw_a_free.fclass: buddhist, christian, christian_catholic, christian_evangelical, christian_lutheran, christian_orthodox, christian_protestant, jewish, muslim_sunni
+- gis_osm_pofw_free.fclass: buddhist, christian, christian_catholic, christian_evangelical, christian_methodist, christian_orthodox, hindu, muslim, muslim_sunni, sikh
+- gis_osm_pois_a_free.fclass: archaeological, arts_centre, artwork, atm, attraction, bakery, bank, bar, battlefield, beauty_shop, bench, beverages, bicycle_rental, bicycle_shop, biergarten, bookshop, butcher, cafe, camera_surveillance, camp_site, caravan_site, car_dealership, car_rental, car_wash, castle, chalet, chemist, cinema, clinic, clothes, college, comms_tower, community_centre, computer_shop, consulate, convenience, courthouse, dentist, department_store, doctors, dog_park, doityourself, drinking_water, embassy, fast_food, fire_station, fitness_centre, florist, food_court, fort, fountain, furniture_shop, garden_centre, general, gift_shop, golf_course, graveyard, greengrocer, guesthouse, hairdresser, hospital, hostel, hotel, hunting_stand, ice_rink, jeweller, kindergarten, kiosk, laundry, library, mall, marketplace, memorial, mobile_phone_shop, monument, motel, museum, newsagent, nightclub, nursing_home, observation_tower, optician, outdoor_shop, park, pharmacy, picnic_site, pitch, playground, police, post_office, prison, pub, public_building, recycling, recycling_clothes, recycling_glass, recycling_metal, recycling_paper, restaurant, ruins, school, shelter, shoe_shop, sports_centre, sports_hall, sports_shop, stadium, stationery, supermarket, swimming_pool, theatre, theme_park, toilet, tourist_info, tower, town_hall, toy_shop, track, travel_agent, university, vending_machine, veterinary, video_shop, viewpoint, waste_basket, wastewater_plant, water_mill, water_tower, water_well, water_works, wayside_cross, wayside_shrine, windmill, zoo
+- gis_osm_pois_free.fclass: archaeological, arts_centre, artwork, atm, attraction, bakery, bank, bar, battlefield, beauty_shop, bench, beverages, bicycle_rental, bicycle_shop, biergarten, bookshop, butcher, cafe, camera_surveillance, camp_site, caravan_site, car_dealership, car_rental, car_wash, castle, chalet, chemist, cinema, clinic, clothes, college, comms_tower, community_centre, computer_shop, consulate, convenience, courthouse, dentist, department_store, doctors, dog_park, doityourself, drinking_water, embassy, fast_food, fire_station, fitness_centre, florist, food_court, fort, fountain, furniture_shop, garden_centre, general, gift_shop, golf_course, graveyard, greengrocer, guesthouse, hairdresser, hospital, hostel, hotel, hunting_stand, ice_rink, jeweller, kindergarten, kiosk, laundry, library, mall, marketplace, memorial, mobile_phone_shop, monument, motel, museum, newsagent, nightclub, nursing_home, observation_tower, optician, outdoor_shop, park, pharmacy, picnic_site, pitch, playground, police, post_box, post_office, pub, public_building, recycling, recycling_clothes, recycling_glass, recycling_metal, recycling_paper, restaurant, ruins, school, shelter, shoe_shop, sports_centre, sports_hall, sports_shop, stadium, stationery, supermarket, swimming_pool, telephone, theatre, theme_park, toilet, tourist_info, tower, town_hall, toy_shop, track, travel_agent, university, vending_machine, vending_parking, veterinary, video_shop, viewpoint, waste_basket, wastewater_plant, water_mill, water_tower, water_well, water_works, wayside_cross, wayside_shrine, wilderness_hut, windmill, zoo
+- gis_osm_protected_areas_a_free.fclass: iucn_1, iucn_4, iucn_5, iucn_6, nature_reserve
+- gis_osm_railways_free.fclass: narrow_gauge, rail, subway, tram
+- gis_osm_roads_free.fclass: bridleway, cycleway, footway, living_street, motorway, motorway_link, path, pedestrian, primary, primary_link, residential, secondary, secondary_link, service, steps, tertiary, tertiary_link, track, track_grade1, track_grade2, track_grade3, track_grade4, track_grade5, trunk, trunk_link, unclassified, unknown
+- gis_osm_traffic_a_free.fclass: bicycle_repair_station, dam, fuel, marina, parking, parking_bicycle, pier, service, slipway, weir
+- gis_osm_traffic_free.fclass: bicycle_repair_station, dam, fuel, lock_gate, marina, mini_roundabout, motorway_junction, parking, parking_bicycle, pedestrian_crossing, railway_crossing, slipway, speed_camera, stop, street_lamp, traffic_signals, turning_circle, waterfall, weir
+- gis_osm_transport_a_free.fclass: airfield, airport, apron, bus_station, bus_stop, helipad, taxi
+- gis_osm_transport_free.fclass: airfield, airport, bus_station, bus_stop, ferry_terminal, helipad, railway_halt, railway_station, taxi, tram_stop
+- gis_osm_water_a_free.fclass: reservoir, riverbank, water, wetland, wetland_bog, wetland_fen, wetland_marsh, wetland_reedbed, wetland_swamp, wetland_tidalflat, wetland_wet_meadow
+- gis_osm_waterways_free.fclass: canal, drain, river, stream
+
+Znaczenie wybranych wartości fclass:
+- pois: 'pharmacy' = apteka; 'chemist' = drogeria (kosmetyki, chemia gospodarcza), a nie apteka.
+- pois: 'supermarket' = supermarket; 'convenience' = mały sklep osiedlowy; 'kiosk' = kiosk.
+- pois: 'restaurant' = restauracja; 'fast_food' = bar szybkiej obsługi; 'cafe' = kawiarnia; 'pub' = pub, zwykle z jedzeniem; 'bar' = bar, zwykle bez jedzenia.
+- pois: 'hospital' = szpital; 'clinic' = przychodnia bez hospitalizacji; 'doctors' = gabinet lekarski.
+- pois: 'school' = szkoła; 'kindergarten' = przedszkole; 'university' = uczelnia.
+- pois: 'bicycle_rental' = wypożyczalnia rowerów, w tym stacje roweru miejskiego.
+- transport: 'railway_station' = większa stacja kolejowa; 'railway_halt' = mniejszy, lokalny przystanek kolejowy; 'tram_stop' = przystanek tramwajowy; 'bus_stop' = przystanek autobusowy; 'bus_station' = dworzec autobusowy.
+- transport: 'airport' = duże lotnisko; 'airfield' = małe lotnisko lub lądowisko; 'apron' = płyta postojowa samolotów.
+- roads: 'motorway' = autostrada; 'trunk' = droga ekspresowa lub główna dwujezdniowa; 'primary' = droga krajowa; 'secondary' = droga regionalna; 'tertiary' = droga lokalna; 'residential' = ulica osiedlowa; 'living_street' = strefa zamieszkania; 'pedestrian' = deptak; 'service' = droga dojazdowa; 'track' = droga gruntowa lub leśna; 'cycleway' = droga rowerowa; 'footway' = chodnik lub ścieżka piesza; 'path' = ścieżka; końcówka '_link' = łącznik lub zjazd.
+- railways: 'rail' = tory kolejowe; 'tram' = tory tramwajowe; 'subway' = tory metra.
+- landuse: 'park' = park; 'forest' = las; 'cemetery' = cmentarz; 'recreation_ground' = teren rekreacyjny; 'allotments' = ogródki działkowe.
+- pofw: 'christian' = kościół chrześcijański bez podanego wyznania; pozostałe wartości 'christian_*' mają podane wyznanie.
+- water_a: 'water' = jezioro lub inny zbiornik wodny; 'reservoir' = sztuczny zbiornik; 'riverbank' = poligon koryta rzeki.
+- waterways: 'river' = duża rzeka; 'stream' = strumień; 'canal' = kanał; 'drain' = rów.
+
+Fakty o danych:
+- Dane obejmują całe województwo mazowieckie, a nie tylko Warszawę.
+- Granica Warszawy: gis_osm_adminareas_a_free, fclass = 'admin_level6', name = 'Warszawa'. Ta sama geometria występuje też jako admin_level7 i admin_level8. Dzielnice Warszawy mają fclass = 'admin_level9'.
+- Ten sam typ obiektu (np. szpital, szkoła, plac zabaw) występuje zarówno jako punkt w gis_osm_pois_free, jak i jako poligon w gis_osm_pois_a_free. Te dwie tabele nie mają wspólnych osm_id.
+- Parki są zapisane w gis_osm_landuse_a_free i powtórzone, z tym samym osm_id, w gis_osm_pois_a_free.
+- Obiekty bez nazwy mają w kolumnie name pusty napis '', a nie NULL.
+- Nazwy ulic i obiektów nie są unikalne w województwie, np. ulica o tej samej nazwie występuje w kilku miejscowościach.
+- Nazwy w kolumnie name pochodzą z OpenStreetMap i mogą różnić się od nazw potocznych używanych w pytaniach.
+- Większość kościołów ma fclass = 'christian', a nie 'christian_catholic'.
+- Duże rzeki bywają zapisane dwa razy: jako linia biegnąca środkiem koryta w gis_osm_waterways_free i jako poligon koryta w gis_osm_water_a_free. Poligony koryt zwykle nie mają nazwy.
+- Granice administracyjne nie tworzą w danych hierarchii, czyli nie ma kolumny mówiącej, w której jednostce leży dana jednostka. Przynależność trzeba sprawdzać przestrzennie.
