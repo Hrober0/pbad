@@ -35,6 +35,18 @@ U mnie to polecenie wyglądało tak (import trwał ok. 2 minut):
 
 ![](./img/osgeo4w-komenda.png)
 
+### Alternatywa bez QGIS: `ogr2ogr` z obrazu Dockera
+
+Jeśli nie masz QGIS, możesz uruchomić `ogr2ogr` z oficjalnego obrazu GDAL. Polecenie trzeba wykonać w folderze, w którym leży `mazowieckie.gpkg` (Git Bash):
+
+```bash
+docker run --rm -v "$(pwd):/data:ro" ghcr.io/osgeo/gdal:ubuntu-small-latest \
+  ogr2ogr -f PostgreSQL PG:"host=host.docker.internal port=5432 dbname=pbad user=pbad password=pbad" \
+  /data/mazowieckie.gpkg -a_srs EPSG:4326 -lco GEOMETRY_NAME=geom
+```
+
+`host.docker.internal` pozwala kontenerowi z GDAL połączyć się z bazą wystawioną na porcie 5432 komputera. W Git Bash na Windows może być potrzebne poprzedzenie polecenia `MSYS_NO_PATHCONV=1`, żeby ścieżka `/data/...` nie została zamieniona na ścieżkę Windows.
+
 ## 4. Połączenie z DataGrip
 
 ![](./img/datagrip-polaczenie.png)

@@ -12,7 +12,7 @@
 
 - możliwe, że trzeba będzie trochę zmienić nasze [pytania testowe](../eksperyment/pytania-testowe.md)
 
-- z badanych przykładów raczej wybierzemy te, które pozwolą nam coś przedstawić - pewnie nie będziemy pisać o wszystkich
+- z badanych przykładów raczej wybierzemy te, które pozwolą nam coś przedstawić - pewnie nie będziemy pisać o wszystkich, 40 (każde z 3ma wariantami) to za dużo
 
 - w przeglądzie literatury nie chodzi o to, żeby mieć jak najwięcej odwołań, analiza ma być po prostu dogłębna
 

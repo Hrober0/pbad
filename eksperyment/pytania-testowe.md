@@ -1,16 +1,21 @@
 # Pytania testowe
 
-Zestaw pytań do eksperymentu: wpływ kontekstu bazy danych (K0–K3) i precyzji pytania (P1–P3) na jakość generowanego przestrzennego SQL.
+Zestaw pytań do eksperymentu 1: wpływ kontekstu bazy danych (K0–K3) na jakość generowanego przestrzennego SQL.
+
+Po spotkaniu 30.10 w eksperymencie 1 używamy tylko wersji naturalnej (P2) i ok. 20 z 40 pytań. Wersje P1 i P3 zostają jako materiał pomocniczy. Pytania do eksperymentu 2 (niejasność): [plan-eksperymentow.md](plan-eksperymentow.md).
 
 Obszar: Warszawa. Dane: OSM z Geofabrik (województwo mazowieckie, plik z 2026-10-29), EPSG:4326, kolumna geometrii `geom`.
 
+## Klasy kontekstu bazy danych
 
-## Klasy kontektu bazy danych
-Poziom	Co dostaje model
-K0	Same nazwy tabel i kolumn
-K1	DDL z typami, w tym geometry(Point,4326)
-K2	K1 + opis tabel i kolumn + lista wartości fclass
-K3	K2 + wskazówki przestrzenne (np. „dla metrów rzutuj na ::geography”) + 3–5 przykładów pytanie→SQL
+| Poziom | Co dostaje model |
+|---|---|
+| K0 | Same nazwy tabel i kolumn |
+| K1 | DDL z typami, w tym `geometry(Point,4326)` |
+| K2 | K1 + opis tabel i kolumn + lista wartości `fclass` + fakty o danych |
+| K3 | K2 + wskazówki przestrzenne (np. „dla metrów rzutuj na `::geography`”) + 5 przykładów pytanie→SQL |
+
+Szczegóły: [poziomy-kontekstu.md](poziomy-kontekstu.md).
 
 
 ## Zasady
