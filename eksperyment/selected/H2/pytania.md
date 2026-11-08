@@ -48,57 +48,6 @@ Odczytujemy przyjęty promień w metrach oraz rodzaj interpretacji: promień, k 
 | 7b | | | pieszo | Idę pieszo. Wymień przystanki autobusowe w pobliżu Lotniska Chopina. |
 | 7c | | | samochodem | Jadę samochodem. Wymień przystanki autobusowe w pobliżu Lotniska Chopina. |
 
-**Porównania:**
-
-| Co sprawdzamy | Porównujemy |
-|---|---|
-| sposób poruszania się | warianty a, b i c w obrębie każdego numeru |
-| określenie „niedaleko” zamiast „w pobliżu” | 1a i 1d |
-| rodzaj szukanego obiektu | 1 i 2, 3 i 4 |
-| wielkość miejscowości | 1, 3 i 5 (centrum Warszawy, peryferie Warszawy, małe miasto) |
-| wielkość punktu odniesienia | 6 i 7 (mały kiosk, duże lotnisko) |
-
-### Pytania 1, 3 i 5: wielkość miejscowości
-
-Sprawdzamy, czy „w pobliżu” znaczy dla modelu co innego w dużym mieście niż w małej miejscowości. Na przykład w Warszawie „w pobliżu” może znaczyć 500 m, a w małym mieście mniej albo więcej. Szukamy zawsze aptek wokół stacji kolejowej, a zmienia się tylko miejscowość.
-
-**Tłuszcz** to miasto liczące ok. 8 tys. mieszkańców, ok. 37 km od Warszawy (`gis_osm_transport_free`, `fclass = 'railway_station'`, `name = 'Tłuszcz'`). Nazwa stacji jest w bazie unikalna.
-
-Liczba nazwanych aptek w zależności od promienia:
-
-| Promień | Dworzec Centralny | Warszawa Płudy | Tłuszcz |
-|---|---|---|---|
-| 300 m | 3 | 0 | 1 |
-| 500 m | 6 | 0 | 2 |
-| 1 km | 26 | 1 | 2 |
-| 2 km | 60 | 4 | 2 |
-
-W Tłuszczu liczba aptek przestaje rosnąć już od 500 m, więc z samego wyniku nie odróżnimy promienia 500 m od 2 km. Promień odczytujemy więc z SQL, a liczba wyników jest tylko pomocnicza.
-
-### Pytania 6 i 7: wielkość punktu odniesienia
-
-Sprawdzamy, czy promień zależy od wielkości obiektu, **wokół którego** szukamy. Szukamy zawsze tego samego, czyli przystanków autobusowych, a zmieniamy punkt odniesienia: mały kiosk albo duże lotnisko. Oba są w Warszawie.
-
-Szukamy przystanków autobusowych, a nie kiosków. Kiosków z nazwą jest w całej bazie tylko 126, więc w okolicy punktu odniesienia jest ich kilka, a ich liczba rośnie skokowo. Wtedy z wyniku nie widać, jaki promień przyjął model. Przystanków z nazwą jest ok. 17,7 tys., są rozmieszczone gęsto i równomiernie, a ich liczba rośnie płynnie z promieniem. Każda zmiana promienia jest więc widoczna w wyniku.
-
-Liczba przystanków autobusowych w zależności od promienia:
-
-| Promień | od kiosku Ciasteczkowo | od granicy Lotniska Chopina | od środka Lotniska Chopina |
-|---|---|---|---|
-| 300 m | 11 | 40 | 0 |
-| 500 m | 37 | 65 | 0 |
-| 1 km | 88 | 109 | 6 |
-| 2 km | 276 | 278 | 68 |
-| 5 km | 1111 | 1127 | 599 |
-
-- **Kiosk Ciasteczkowo** (Śródmieście, `gis_osm_pois_free`, `fclass = 'kiosk'`) to punkt, a jego nazwa w bazie jest unikalna.
-- **Lotnisko Chopina** (`gis_osm_transport_a_free`, `fclass = 'airport'`) to poligon o powierzchni ok. 568 ha, czyli w przybliżeniu kwadrat o boku 2,4 km.
-- Przy tym samym promieniu liczony od granicy lotniska daje podobną liczbę przystanków co od kiosku. Promień liczony od środka lotniska daje dużo mniej, bo środek leży na płycie lotniska.
-- **Na co patrzymy:**
-  - czy dla lotniska model przyjmuje większy promień niż dla kiosku,
-  - czy liczy odległość od granicy lotniska, czy od jego środka, np. przez `ST_Centroid`. Rozpoznamy to po liczbie wyników z tabeli powyżej,
-  - czy wpływ sposobu poruszania się jest taki sam przy obu punktach odniesienia.
-
 ## Część 2b: czas dojazdu — 4 warianty, 12 wywołań
 
 Odczytujemy przyjęty promień oraz wynikającą z niego prędkość. Litery a, b i c znaczą to samo co w części 2a, a d oznacza jazdę rowerem.

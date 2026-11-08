@@ -12,30 +12,35 @@ Opis tego, co model dostaje w prompcie na każdym poziomie kontekstu. Poziom kon
 
 ## Część wspólna dla wszystkich poziomów
 
-Każdy prompt zaczyna się tą samą instrukcją zadania. Zawiera ona konwencje oceny, a nie wiedzę o danych, więc nie może się zmieniać między poziomami. Inaczej pytanie P2 typu „ile aptek…” miałoby ukryte kryterium, którego model nie mógłby znać.
+Każdy prompt zaczyna się tą samą instrukcją zadania. Opisuje ona samo zadanie, a nie dane, więc nie zmienia się między poziomami. Cała wiedza o bazie jest w kontekście, bo to ona jest badanym czynnikiem.
 
 ```text
-Jesteś asystentem, który tłumaczy pytania w języku polskim na zapytania SQL
+Jesteś asystentem, który na podstawie pytania użytkownika buduje zapytanie SQL
 dla bazy PostgreSQL 18 z rozszerzeniem PostGIS 3.6.
 
-Zwróć dokładnie jedno zapytanie SELECT w bloku ```sql ... ```, bez dodatkowych wyjaśnień.
+Zbuduj jedno zapytanie SELECT, które odpowiada na zadane pytanie.
 Nie modyfikuj danych.
 
-Obowiązujące konwencje:
-1. Obiekt należy do obszaru, jeśli się z nim przecina. W pytaniach o długość lub
-   powierzchnię „w granicach” obszaru licz tylko część leżącą wewnątrz obszaru.
-2. Każdy obiekt licz tylko raz.
-3. Pomijaj obiekty bez nazwy, zarówno w wynikach, jak i przy liczeniu.
-4. Odległości podawaj w metrach, długości w metrach lub kilometrach, powierzchnie
-   w metrach kwadratowych lub hektarach, zgodnie z pytaniem.
+Poniżej znajdziesz dodatkowe informacje o bazie danych, które mogą pomóc
+w zbudowaniu zapytania.
 
-Opis bazy danych:
 <KONTEKST K0 / K1 / K2 / K3>
 
 Pytanie: <PYTANIE>
 ```
 
-Konwencja 4 też jest wspólna, bo jednostka wyniku wynika z pytania. Sposób jej uzyskania, czyli rzutowanie na `geography`, pojawia się dopiero w K3.
+Instrukcja jest celowo krótka. Formatu odpowiedzi nie opisujemy słowami, bo wymusza
+go schemat JSON przekazany w `output_config.format`: model zwraca obiekt z polami
+`sql` i `explanation`. Pole `sql` jest w schemacie pierwsze, więc powstaje przed
+wyjaśnieniem — `explanation` opisuje gotowe zapytanie, a nie rozumowanie, które
+mogłoby na nie wpłynąć.
+
+Instrukcja nie narzuca też żadnych konwencji liczenia ani jednostek. Wcześniejsza
+wersja je zawierała, ale to szczegóły danych, a nie opis zadania, więc ich miejsce
+jest w kontekście: fakty w K2, wskazówki w K3. Dzięki temu instrukcja nie podpowiada
+niczego, co miałoby odróżniać poziomy. Ceną jest to, że przy pytaniach o jednostkę
+albo o przynależność do obszaru model może przyjąć własne założenie — zapisuje je
+w polu `explanation` i bierzemy je pod uwagę przy ocenie.
 
 ---
 
@@ -120,7 +125,7 @@ gis_osm_adminareas_a_free: granice administracyjne; fclass określa poziom (admi
 gis_osm_landuse_a_free: użytkowanie terenu (parki, lasy, cmentarze, tereny mieszkaniowe, ...).
 
 Kolumny wspólne:
-- osm_id: identyfikator obiektu w OpenStreetMap,
+- osm_id: identyfikator obiektu w OpenStreetMap, nie zawsze unikalny,
 - code: liczbowy kod typu obiektu (odpowiada fclass),
 - fclass: typ obiektu (np. 'pharmacy', 'tram_stop', 'park'),
 - name: nazwa obiektu.
@@ -145,8 +150,9 @@ Fakty pochodzą z „Ustaleń dotyczących danych” w [pytania-testowe.md](pyta
 - Dane obejmują całe województwo mazowieckie, a nie tylko Warszawę.
 - Granica Warszawy: gis_osm_adminareas_a_free, fclass = 'admin_level6', name = 'Warszawa'.
   Dzielnice Warszawy mają fclass = 'admin_level9'.
-- Ten sam typ obiektu (np. szpital, szkoła, plac zabaw) występuje zarówno jako punkt
-  w gis_osm_pois_free, jak i jako poligon w gis_osm_pois_a_free.
+- Sześć warstw ma po dwie tabele: bez _a dla obiektów narysowanych jako punkt i z _a dla
+  narysowanych jako poligon. Są to pois, pofw, traffic, transport, natural i places. Ten sam
+  typ obiektu występuje w obu tabelach, a bywa, że prawie wyłącznie w jednej z nich.
 - Parki są zapisane w gis_osm_landuse_a_free i powtórzone (z tym samym osm_id)
   w gis_osm_pois_a_free.
 - Obiekty bez nazwy mają w kolumnie name pusty napis '', a nie NULL.
@@ -180,10 +186,13 @@ Fakty opisują dane jako całość i żaden z nich nie podaje nazwy obiektu, o k
 - Dane są w EPSG:4326 (stopnie). Aby liczyć odległości, długości i powierzchnie w metrach,
   rzutuj geometrie na geography, np. ST_Distance(a.geom::geography, b.geom::geography).
 - Do wyszukiwania w promieniu używaj ST_DWithin(a.geom::geography, b.geom::geography, <metry>).
-- Do sprawdzania, czy obiekt należy do obszaru, używaj ST_Intersects.
-- Do liczenia długości lub powierzchni w granicach obszaru użyj ST_Intersection.
-- Gdy pytanie dotyczy typu obiektu z pois, połącz gis_osm_pois_free i gis_osm_pois_a_free
-  przez UNION.
+- Do sprawdzania, czy obiekt należy do obszaru, używaj ST_Intersects. Gdy obiekt sam jest
+  obszarem i ma leżeć w całości wewnątrz, użyj ST_Within.
+- Do liczenia długości lub powierzchni w granicach obszaru użyj ST_Intersection. Gdy poligony
+  mogą na siebie nachodzić, scal je wcześniej przez ST_Union.
+- Gdy pytanie dotyczy typu obiektu z warstwy mającej tabelę _a, połącz obie tabele przez
+  UNION, np. gis_osm_pois_free z gis_osm_pois_a_free. Dotyczy to tak samo obiektów szukanych,
+  obiektów odniesienia i tych, które występują tylko w warunku.
 - Gdy pytanie prosi o nazwy obiektów, pomijaj obiekty bez nazwy warunkiem name <> ''.
   Brak nazwy zapisano jako pusty napis, więc name IS NOT NULL niczego nie odfiltruje.
   Przy zliczaniu i mierzeniu nie filtruj po nazwie.
@@ -205,6 +214,8 @@ Inaczej niż w DAIL-SQL przykłady są stałe, a nie dobierane do pytania. Dzię
 ```sql
 -- Pytanie: Ile piekarni jest w promieniu 400 m od Muzeum Narodowego w Warszawie?
 WITH ref AS (SELECT geom FROM gis_osm_pois_free
+             WHERE fclass = 'museum' AND name ILIKE '%Muzeum Narodowe%'
+             UNION SELECT geom FROM gis_osm_pois_a_free
              WHERE fclass = 'museum' AND name ILIKE '%Muzeum Narodowe%'),
 poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bakery'
         UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bakery')
@@ -227,34 +238,36 @@ LIMIT 3;
 -- Pytanie: Które 3 dzielnice Warszawy mają najwięcej księgarń?
 WITH waw AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level6' AND name = 'Warszawa'),
 d AS (SELECT a.name, a.geom FROM gis_osm_adminareas_a_free a, waw
-      WHERE a.fclass = 'admin_level9' AND a.name <> '' AND ST_Intersects(a.geom, waw.geom)),
-poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bookshop' AND name <> ''
-        UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bookshop' AND name <> '')
+      WHERE a.fclass = 'admin_level9' AND a.name <> '' AND ST_Within(a.geom, waw.geom)),
+poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bookshop'
+        UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bookshop')
 SELECT d.name, count(DISTINCT poi.osm_id) AS bookshops
 FROM d JOIN poi ON ST_Intersects(poi.geom, d.geom)
 GROUP BY d.name
 ORDER BY bookshops DESC
 LIMIT 3;
--- wynik: Śródmieście 67, Mokotów 23, Praga-Południe 14
+-- wynik: Śródmieście 73, Mokotów 23, Praga-Południe 14
 
 -- Pytanie: Ile kościołów w Warszawie ma stację paliw w promieniu 300 m?
 WITH waw AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level6' AND name = 'Warszawa'),
 ch AS (SELECT osm_id, geom FROM gis_osm_pofw_free WHERE fclass LIKE 'christian%'
-       UNION SELECT osm_id, geom FROM gis_osm_pofw_a_free WHERE fclass LIKE 'christian%')
+       UNION SELECT osm_id, geom FROM gis_osm_pofw_a_free WHERE fclass LIKE 'christian%'),
+fuel AS (SELECT geom FROM gis_osm_traffic_free WHERE fclass = 'fuel'
+         UNION SELECT geom FROM gis_osm_traffic_a_free WHERE fclass = 'fuel')
 SELECT count(DISTINCT ch.osm_id)
 FROM ch, waw
 WHERE ST_Intersects(ch.geom, waw.geom)
-  AND EXISTS (SELECT 1 FROM gis_osm_traffic_free t
-              WHERE t.fclass = 'fuel'
-                AND ST_DWithin(ch.geom::geography, t.geom::geography, 300));
--- wynik: 17
+  AND EXISTS (SELECT 1 FROM fuel f
+              WHERE ST_DWithin(ch.geom::geography, f.geom::geography, 300));
+-- wynik: 39
 
--- Pytanie: Ile hektarów zajmują wody na Żoliborzu?
+-- Pytanie: Ile hektarów zajmują zbiorniki wodne i koryta rzek na Żoliborzu?
 WITH zol AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level9' AND name = 'Żoliborz')
-SELECT round((sum(ST_Area(ST_Intersection(w.geom, zol.geom)::geography)) / 10000)::numeric, 2) AS area_ha
+SELECT round((ST_Area(ST_Union(ST_Intersection(w.geom, zol.geom))::geography) / 10000)::numeric, 2) AS area_ha
 FROM gis_osm_water_a_free w, zol
-WHERE ST_Intersects(w.geom, zol.geom);
--- wynik: 53.59
+WHERE w.fclass IN ('water', 'reservoir', 'riverbank')
+  AND ST_Intersects(w.geom, zol.geom);
+-- wynik: 52.72
 ```
 
 W prompcie przykłady podajemy bez komentarzy `-- wynik`. Wyniki zapisaliśmy tu tylko po to, żeby było widać, że zapytania zostały sprawdzone.
@@ -279,14 +292,14 @@ W prompcie przykłady podajemy bez komentarzy `-- wynik`. Wyniki zapisaliśmy tu
 | Typ geometrii (punkt / poligon) | – | ✓ | ✓ | ✓ |
 | SRID 4326, więc odległość w stopniach | – | widać SRID | widać SRID | ✓ wskazówka |
 | Wartości `fclass` (np. `'pharmacy'`, `'christian'`) | – | – | ✓ | ✓ |
-| Ten sam typ obiektu w `pois` i `pois_a` | – | – | ✓ fakt | ✓ wskazówka + przykład |
+| Ten sam typ obiektu w tabeli bez `_a` i z `_a` | – | – | ✓ fakt | ✓ wskazówka + przykład |
 | Granica Warszawy w `adminareas` | – | – | ✓ | ✓ + przykład |
 | Pusta nazwa to `''`, a nie NULL | – | – | ✓ fakt | ✓ wskazówka + przykład |
 | Nazwy w bazie inne niż potoczne | – | – | ✓ fakt | ✓ + wskazówka (ILIKE) |
 | Nazwy nieunikalne w województwie | – | – | ✓ fakt | ✓ wskazówka |
 | Pobieranie obiektu z bazy zamiast wpisanych współrzędnych | – | – | – | ✓ wskazówka + przykład |
 
-Konwencje oceny (przecięcie, liczenie raz, pomijanie obiektów bez nazwy, jednostki) są w części wspólnej na każdym poziomie, więc nie ma ich w tabeli.
+Instrukcja wspólna nie zawiera żadnych konwencji, więc nie ma czego dopisywać do tabeli.
 
 ## Implementacja
 

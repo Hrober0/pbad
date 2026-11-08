@@ -214,7 +214,7 @@ Tabele z "_a" w nazwie zawierają obiekty narysowane w OpenStreetMap jako obszar
 
 Opis kolumn:
 - fid: identyfikator wiersza w tabeli.
-- osm_id: identyfikator obiektu w OpenStreetMap. Nie zawsze jest unikalny, bo jeden obiekt OSM może dać kilka geometrii.
+- osm_id: identyfikator obiektu w OpenStreetMap. Nie zawsze jest unikalny: obiekt pasujący do kilku typów trafia do tabeli jako kilka wierszy o tym samym osm_id i tej samej geometrii, ale różnych wartościach fclass, np. ten sam punkt jako księgarnia i jako biblioteka.
 - code: czterocyfrowy kod typu obiektu; pierwsze cyfry oznaczają warstwę, ostatnie typ w warstwie. Niesie tę samą informację co fclass.
 - fclass: typ obiektu, np. 'pharmacy', 'tram_stop', 'park'. Dopuszczalne wartości są wymienione niżej.
 - name: nazwa lokalna obiektu, czyli taka jak na tablicy, po polsku. Jest pusta, gdy obiekt nie ma nazwy albo nazwa w OSM była oczywiście błędna.
@@ -272,7 +272,7 @@ Znaczenie wybranych wartości fclass:
 Fakty o danych:
 - Dane obejmują całe województwo mazowieckie, a nie tylko Warszawę.
 - Granica Warszawy: gis_osm_adminareas_a_free, fclass = 'admin_level6', name = 'Warszawa'. Ta sama geometria występuje też jako admin_level7 i admin_level8. Dzielnice Warszawy mają fclass = 'admin_level9'.
-- Ten sam typ obiektu (np. szpital, szkoła, plac zabaw) występuje zarówno jako punkt w gis_osm_pois_free, jak i jako poligon w gis_osm_pois_a_free. Te dwie tabele nie mają wspólnych osm_id.
+- Sześć warstw ma po dwie tabele: bez _a dla obiektów narysowanych w OpenStreetMap jako punkt i z _a dla narysowanych jako poligon. Są to pois, pofw, traffic, transport, natural i places. Podział zależy od sposobu narysowania obiektu, a nie od jego rodzaju, więc ten sam typ obiektu występuje w obu tabelach, a bywa, że prawie wyłącznie w jednej z nich. Tabele w parze praktycznie nie mają wspólnych osm_id.
 - Parki są zapisane w gis_osm_landuse_a_free i powtórzone, z tym samym osm_id, w gis_osm_pois_a_free.
 - Obiekty bez nazwy mają w kolumnie name pusty napis '', a nie NULL.
 - Nazwy ulic i obiektów nie są unikalne w województwie, np. ulica o tej samej nazwie występuje w kilku miejscowościach.
@@ -284,9 +284,9 @@ Fakty o danych:
 Wskazówki dotyczące pisania zapytań:
 - Dane są w EPSG:4326 (stopnie). Aby liczyć odległości, długości i powierzchnie w metrach, rzutuj geometrie na geography, np. ST_Distance(a.geom::geography, b.geom::geography).
 - Do wyszukiwania w promieniu używaj ST_DWithin(a.geom::geography, b.geom::geography, <metry>).
-- Do sprawdzania, czy obiekt należy do obszaru, używaj ST_Intersects.
-- Do liczenia długości lub powierzchni w granicach obszaru użyj ST_Intersection.
-- Gdy pytanie dotyczy typu obiektu z pois, połącz gis_osm_pois_free i gis_osm_pois_a_free przez UNION.
+- Do sprawdzania, czy obiekt należy do obszaru, używaj ST_Intersects. Gdy obiekt sam jest obszarem i ma leżeć w całości wewnątrz, użyj ST_Within, bo ST_Intersects złapie też obszary sąsiednie, które tylko stykają się granicą.
+- Do liczenia długości lub powierzchni w granicach obszaru użyj ST_Intersection. Gdy poligony mogą na siebie nachodzić, scal je wcześniej przez ST_Union, żeby nie policzyć tej samej powierzchni dwa razy.
+- Gdy pytanie dotyczy typu obiektu z warstwy mającej tabelę _a, połącz obie tabele przez UNION, np. gis_osm_pois_free z gis_osm_pois_a_free. Dotyczy to tak samo obiektów szukanych, obiektów odniesienia i tych, które występują tylko w warunku.
 - Gdy pytanie prosi o nazwy obiektów, pomijaj obiekty bez nazwy warunkiem name <> ''. Brak nazwy zapisano jako pusty napis, więc name IS NOT NULL niczego nie odfiltruje. Przy zliczaniu i mierzeniu nie filtruj po nazwie.
 - Aby liczyć każdy obiekt raz, użyj COUNT(DISTINCT osm_id).
 - Obiekty referencyjne wybieraj z bazy po nazwie. Nie wpisuj współrzędnych ręcznie.
@@ -297,6 +297,8 @@ Przykłady pytań i zapytań:
 
 -- Pytanie: Ile piekarni jest w promieniu 400 m od Muzeum Narodowego w Warszawie?
 WITH ref AS (SELECT geom FROM gis_osm_pois_free
+             WHERE fclass = 'museum' AND name ILIKE '%Muzeum Narodowe%'
+             UNION SELECT geom FROM gis_osm_pois_a_free
              WHERE fclass = 'museum' AND name ILIKE '%Muzeum Narodowe%'),
 poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bakery'
         UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bakery')
@@ -317,9 +319,9 @@ LIMIT 3;
 -- Pytanie: Które 3 dzielnice Warszawy mają najwięcej księgarń?
 WITH waw AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level6' AND name = 'Warszawa'),
 d AS (SELECT a.name, a.geom FROM gis_osm_adminareas_a_free a, waw
-      WHERE a.fclass = 'admin_level9' AND a.name <> '' AND ST_Intersects(a.geom, waw.geom)),
-poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bookshop' AND name <> ''
-        UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bookshop' AND name <> '')
+      WHERE a.fclass = 'admin_level9' AND a.name <> '' AND ST_Within(a.geom, waw.geom)),
+poi AS (SELECT osm_id, geom FROM gis_osm_pois_free WHERE fclass = 'bookshop'
+        UNION SELECT osm_id, geom FROM gis_osm_pois_a_free WHERE fclass = 'bookshop')
 SELECT d.name, count(DISTINCT poi.osm_id) AS bookshops
 FROM d JOIN poi ON ST_Intersects(poi.geom, d.geom)
 GROUP BY d.name
@@ -329,16 +331,18 @@ LIMIT 3;
 -- Pytanie: Ile kościołów w Warszawie ma stację paliw w promieniu 300 m?
 WITH waw AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level6' AND name = 'Warszawa'),
 ch AS (SELECT osm_id, geom FROM gis_osm_pofw_free WHERE fclass LIKE 'christian%'
-       UNION SELECT osm_id, geom FROM gis_osm_pofw_a_free WHERE fclass LIKE 'christian%')
+       UNION SELECT osm_id, geom FROM gis_osm_pofw_a_free WHERE fclass LIKE 'christian%'),
+fuel AS (SELECT geom FROM gis_osm_traffic_free WHERE fclass = 'fuel'
+         UNION SELECT geom FROM gis_osm_traffic_a_free WHERE fclass = 'fuel')
 SELECT count(DISTINCT ch.osm_id)
 FROM ch, waw
 WHERE ST_Intersects(ch.geom, waw.geom)
-  AND EXISTS (SELECT 1 FROM gis_osm_traffic_free t
-              WHERE t.fclass = 'fuel'
-                AND ST_DWithin(ch.geom::geography, t.geom::geography, 300));
+  AND EXISTS (SELECT 1 FROM fuel f
+              WHERE ST_DWithin(ch.geom::geography, f.geom::geography, 300));
 
--- Pytanie: Ile hektarów zajmują wody na Żoliborzu?
+-- Pytanie: Ile hektarów zajmują zbiorniki wodne i koryta rzek na Żoliborzu?
 WITH zol AS (SELECT geom FROM gis_osm_adminareas_a_free WHERE fclass = 'admin_level9' AND name = 'Żoliborz')
-SELECT round((sum(ST_Area(ST_Intersection(w.geom, zol.geom)::geography)) / 10000)::numeric, 2) AS area_ha
+SELECT round((ST_Area(ST_Union(ST_Intersection(w.geom, zol.geom))::geography) / 10000)::numeric, 2) AS area_ha
 FROM gis_osm_water_a_free w, zol
-WHERE ST_Intersects(w.geom, zol.geom);
+WHERE w.fclass IN ('water', 'reservoir', 'riverbank')
+  AND ST_Intersects(w.geom, zol.geom);

@@ -214,7 +214,7 @@ Tabele z "_a" w nazwie zawierają obiekty narysowane w OpenStreetMap jako obszar
 
 Opis kolumn:
 - fid: identyfikator wiersza w tabeli.
-- osm_id: identyfikator obiektu w OpenStreetMap. Nie zawsze jest unikalny, bo jeden obiekt OSM może dać kilka geometrii.
+- osm_id: identyfikator obiektu w OpenStreetMap. Nie zawsze jest unikalny: obiekt pasujący do kilku typów trafia do tabeli jako kilka wierszy o tym samym osm_id i tej samej geometrii, ale różnych wartościach fclass, np. ten sam punkt jako księgarnia i jako biblioteka.
 - code: czterocyfrowy kod typu obiektu; pierwsze cyfry oznaczają warstwę, ostatnie typ w warstwie. Niesie tę samą informację co fclass.
 - fclass: typ obiektu, np. 'pharmacy', 'tram_stop', 'park'. Dopuszczalne wartości są wymienione niżej.
 - name: nazwa lokalna obiektu, czyli taka jak na tablicy, po polsku. Jest pusta, gdy obiekt nie ma nazwy albo nazwa w OSM była oczywiście błędna.
@@ -272,7 +272,7 @@ Znaczenie wybranych wartości fclass:
 Fakty o danych:
 - Dane obejmują całe województwo mazowieckie, a nie tylko Warszawę.
 - Granica Warszawy: gis_osm_adminareas_a_free, fclass = 'admin_level6', name = 'Warszawa'. Ta sama geometria występuje też jako admin_level7 i admin_level8. Dzielnice Warszawy mają fclass = 'admin_level9'.
-- Ten sam typ obiektu (np. szpital, szkoła, plac zabaw) występuje zarówno jako punkt w gis_osm_pois_free, jak i jako poligon w gis_osm_pois_a_free. Te dwie tabele nie mają wspólnych osm_id.
+- Sześć warstw ma po dwie tabele: bez _a dla obiektów narysowanych w OpenStreetMap jako punkt i z _a dla narysowanych jako poligon. Są to pois, pofw, traffic, transport, natural i places. Podział zależy od sposobu narysowania obiektu, a nie od jego rodzaju, więc ten sam typ obiektu występuje w obu tabelach, a bywa, że prawie wyłącznie w jednej z nich. Tabele w parze praktycznie nie mają wspólnych osm_id.
 - Parki są zapisane w gis_osm_landuse_a_free i powtórzone, z tym samym osm_id, w gis_osm_pois_a_free.
 - Obiekty bez nazwy mają w kolumnie name pusty napis '', a nie NULL.
 - Nazwy ulic i obiektów nie są unikalne w województwie, np. ulica o tej samej nazwie występuje w kilku miejscowościach.

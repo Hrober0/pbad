@@ -43,7 +43,7 @@ Kategorie Z, N, J, A pochodzą z NALSpatial (praca 6 w przeglądzie literatury).
 
 ## Do uzupełnienia: tokeny i trafność
 
-Liczbę tokenów bierzemy z `usage.input_tokens` w odpowiedzi API. Obejmuje ona cały prompt: instrukcję, kontekst i pytanie. Zapisujemy ją przy każdym wywołaniu, a tu wpisujemy średnią dla poziomu. Między pytaniami różni się tylko długość samego pytania, czyli kilkadziesiąt tokenów.
+Liczymy tokeny całego promptu, czyli instrukcji, kontekstu i pytania razem. Zapisujemy je przy każdym wywołaniu, a tu wpisujemy średnią dla poziomu. Między pytaniami różni się tylko długość samego pytania, czyli kilkadziesiąt tokenów.
 
 | Poziom | Tokeny promptu (średnia) | Trafność |
 |---|---|---|
@@ -54,7 +54,7 @@ Liczbę tokenów bierzemy z `usage.input_tokens` w odpowiedzi API. Obejmuje ona 
 
 ## Do uzupełnienia: zapytania wzorcowe
 
-Dla każdego pytania potrzebujemy zapytania wzorcowego i jego wyniku z bazy. Bez tego nie ma z czym porównać odpowiedzi modelu.
+Dla każdego pytania potrzebujemy zapytania wzorcowego i jego wyniku z bazy. Bez tego nie ma z czym porównać odpowiedzi modelu. Tutaj pewnie będą po trzy wyniki dla każdego pytania.
 
 | Kod | Wzorzec | Wynik | Uwagi |
 |---|---|---|---|
