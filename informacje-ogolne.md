@@ -7,6 +7,7 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
 **H1:** Opis zawartości danych poprawia trafność zapytań przestrzennych SQL bardziej niż opis struktury bazy danych oraz wskazówki i przykłady zapytań.
 
 #### Wyjaśnienie H1
+
 - **Opis struktury bazy danych** to nazwy tabel i kolumn wraz z typami, w tym typem geometrii i układem współrzędnych.
 - **Opis zawartości danych** to znaczenie tabel i kolumn, dopuszczalne wartości typu obiektu (np. `'pharmacy'`) oraz fakty o danych, np. że ten sam rodzaj obiektu bywa zapisany raz jako punkt, a raz jako poligon, albo że brak nazwy to pusty napis. Ten opis mówi, **co jest w bazie**, ale nie mówi, jak pisać zapytania.
 - **Wskazówki i przykłady zapytań** mówią, **jak pisać zapytania**:
@@ -25,6 +26,7 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
   - wskazówki i przykłady: przyrost K2 → K3.
 
   Szczegóły poziomów: [poziomy-kontekstu.md](eksperyment/draft/poziomy-kontekstu.md).
+
 - **Potwierdzenie:** przyrost K1 → K2 jest większy od obu pozostałych.
 - **Obalenie:** największy jest przyrost K0 → K1 albo K2 → K3.
 - **Literatura:** DAIL-SQL (praca 9) i przegląd z pracy 12 pokazują, że sposób opisu bazy w prompcie wpływa na wynik, ale nie rozdzielają wpływu opisu struktury, opisu zawartości danych oraz przykładów.
@@ -32,6 +34,7 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
 **H2:** Model interpretuje niejasne określenia przestrzenne zależnie od kontekstu pytania. Zmiana opisu sytuacji pytającego, miejsca albo rodzaju szukanego obiektu zmienia wartość, którą model przyjmuje dla tego samego określenia.
 
 #### Wyjaśnienie H2
+
 - **Niejasne określenie przestrzenne** to sformułowanie, które nie podaje odległości wprost:
   - bez żadnej miary, np. „w pobliżu”, „niedaleko”,
   - z miarą, którą trzeba przeliczyć, np. „w 15 minut”.
@@ -55,6 +58,7 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
   - **2d: „duże” i „małe”.** Niejasna cecha obiektu, niezwiązana z odległością. Dwie cechy × trzy miasta różnej wielkości (Warszawa, Radom, Płock). Daje to 6 pytań. Sprawdzamy, jak model rozumie wielkość i czy progi dla obu cech są spójne.
 
   Każde pytanie zadajemy 3 razy przy stałym kontekście **K2**. K2 zawiera pełny opis danych, ale nie ma wskazówek ani przykładów zapytań. Model odpowiada w formacie JSON: `{"sql": "...", "uwagi": "..."}`, gdzie pole `uwagi` może pozostać puste. Z SQL odczytujemy przyjęty promień oraz rodzaj interpretacji: promień, k najbliższych obiektów, obszar administracyjny albo inny. Z pola `uwagi` sprawdzamy, czy model ujawnił przyjęte założenie. Eksperyment nie wymaga zapytań wzorcowych, bo nie oceniamy poprawności, tylko przyjęte wartości. Pełna lista pytań: [selected/H2](eksperyment/selected/H2/pytania.md).
+
 - **Zasady porównania wyników z wzorcem (eksperyment 1):**
   - Dla każdego pytania ustalamy kolumny kluczowe, np. `name` albo liczbę. Pozostałe kolumny w wyniku modelu ignorujemy.
   - Wiersze porównujemy jako zbiory, bez względu na kolejność. Kolejność ma znaczenie tylko w pytaniach o „najbliższe” i „top k”.
@@ -75,10 +79,12 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
 ## Zmienne zależne/niezależne (co będzie zmieniane, co będzie mierzone)
 
 **Zmieniamy (zmienne niezależne):**
+
 - Eksperyment 1: ilość i rodzaj informacji o bazie w prompcie, czyli poziom kontekstu K0–K3.
 - Eksperyment 2: kontekst wokół niejasnego określenia, czyli opis sytuacji pytającego, miejsce, rodzaj szukanego obiektu i miasto.
 
 **Mierzymy (zmienne zależne):**
+
 - Eksperyment 1:
   - trafność, czyli odsetek poprawnych zapytań, na każdym poziomie, łącznie i osobno dla każdej kategorii zapytań,
   - przyrosty trafności między kolejnymi poziomami: K0 → K1, K1 → K2, K2 → K3,
@@ -99,10 +105,12 @@ Chcemy sprawdzić, jak różne sposoby zwiększania kontekstu wpływają na jako
 **H1.** Spodziewamy się, że najsłabiej wypadnie K0, a największy skok nastąpi między K1 a K2, bo to tam model dowiaduje się o pułapkach w danych. Najczęstsze z nich to szpitale i szkoły zapisane w dwóch tabelach, puste nazwy oraz to, że Dworzec Centralny nazywa się w bazie „Warszawa Centralna”.
 
 Między K2 a K3 spodziewamy się mniejszego, ale zauważalnego przyrostu. Wskazówki i przykłady pomogą głównie tam, gdzie model zna fakt o danych, ale nie umie go przełożyć na SQL. Typowe przypadki:
+
 - wie, że obiekty są w dwóch tabelach, ale ich nie łączy,
 - wie, że dane są w stopniach, ale nie rzutuje na `geography`.
 
 Możliwe wyniki:
+
 - **Największy przyrost K1 → K2:** H1 potwierdzona. Modelowi najbardziej brakuje wiedzy o danych.
 - **Największy przyrost K0 → K1:** H1 obalona. Dla współczesnych modeli ważniejsza jest sama struktura bazy.
 - **Największy przyrost K2 → K3:** H1 obalona. Fakty o danych nie wystarczą, a model potrzebuje gotowych wzorców zapytań. To ważny wniosek praktyczny: opis danych trzeba uzupełniać przykładami.
@@ -111,6 +119,7 @@ Możliwe wyniki:
 Każdy z tych wyników da się opisać w artykule. Przy K3 sprawdzamy też, które błędy z K2 znikają po dodaniu wskazówek i przykładów, a które zostają.
 
 **H2.** Spodziewamy się, że:
+
 - **Opis sytuacji zmieni promień najmocniej.** Dla „samochodem” promień będzie kilka razy większy niż dla „pieszo”, bo ta informacja jest podana wprost.
 - **Miejsce zmieni promień słabo albo wcale.** Model musiałby sam ocenić, że w okolicy peryferyjnej obiektów jest mniej, a w pytaniu tej informacji nie ma.
 - **Rodzaj obiektu zmieni promień słabiej niż sytuacja.** Apteki, parki i szpitale mogą dostać tę samą wartość, np. 1 km.
@@ -118,6 +127,7 @@ Każdy z tych wyników da się opisać w artykule. Przy K3 sprawdzamy też, któ
 - **W części 2b przyjmie typowe prędkości:** ok. 5 km/h pieszo, ok. 15 km/h rowerem, 30–50 km/h samochodem w mieście.
 
 Możliwe wyniki:
+
 - **Promień zmienia się przy wszystkich trzech czynnikach:** H2 potwierdzona. Model interpretuje kontekst także tam, gdzie musi sam wnioskować.
 - **Promień zmienia się tylko przy opisie sytuacji:** H2 potwierdzona, ale model reaguje jedynie na informację podaną wprost i nie wnioskuje sam z miejsca ani z rodzaju obiektu.
 - **Promień jest stały:** H2 obalona. Model stosuje mechaniczne wartości domyślne.
@@ -125,6 +135,7 @@ Możliwe wyniki:
 **Rozszerzenie, jeśli starczy czasu:** krótka ankieta wśród ludzi z tymi samymi pytaniami, np. „co dla Ciebie znaczy apteka w pobliżu dworca, gdy idziesz pieszo?”. Pozwoli sprawdzić, czy wartości przyjmowane przez model są zbliżone do oczekiwań pytających.
 
 **Co dodatkowo możemy sprawdzić:**
+
 - czy model reaguje tak samo na wskazówkę podaną wprost („Idę pieszo.”) i na sam opis sytuacji, z którego trzeba ją wywnioskować („Mam 20 minut do odjazdu pociągu.”),
 - czy przy znanych obiektach (PKiN, Stadion Narodowy) model wpisuje współrzędne z pamięci zamiast pobierać je z bazy i czy przy mało znanych obiektach radzi sobie gorzej,
 - które kategorie zapytań są najtrudniejsze,
@@ -146,16 +157,6 @@ Możliwe wyniki:
 
 ## Zadania do wykonania i ich alokacja (jakie działania są wymagane)
 
-- poprawić dane do eksperymentów i ostateczne ustalić hipotezę
-
-- przygotowanie prezentacji zgodnie z wymaganiami
-
 - dalszy ciąg przeglądu literatury jak będziemy już dokładnie wiedzili co mamy robić
-
-- interfejs do konsolowego zadania pytań
-
-- sprawdzić korzystanie z Claude API - konfiguracja, jak można zwiększać kontekst, jak można zmuszać do ustrukturyzowanej odpowiedzi, jak można zmieniać parametry modelu
-
-- przedstawić wnioski na spotkaniu z opiekunem
 
 - eksperymenty i draft artykułu

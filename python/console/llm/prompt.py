@@ -6,6 +6,8 @@ Wygeneruj jedno zapytanie SELECT odpowiadające na pytanie użytkownika.
 Jeśli pytanie nie może zostać wyrażone jako zapytanie SQL, zwróć pusty
 ciąg w polu sql i wyjaśnij przyczynę w polu explanation.
 
+Wynik zapytania ma odpowiadać dokładnie na pytanie.
+
 Poniżej znajdziesz dodatkowe informacje o bazie danych, które mogą pomóc
 w zbudowaniu zapytania.
 
