@@ -1,0 +1,16 @@
+# Copy this file to .env in the same directory and fill in the values.
+# .env is gitignored; this template is not, so never put a real key here.
+
+# Claude API key, from platform.claude.com -> Settings -> API keys.
+# Used by main.py (REPL) and run_h1.py (experiment runner).
+ANTHROPIC_API_KEY=
+
+# Connection used by `run_h1.py exec` to run the SQL produced by the model.
+# Point it at a read-only role: model output is untrusted and must not be able
+# to modify the database. See eksperyment/selected/H1/plan-uruchomienia.md
+# for the CREATE ROLE snippet. Defaults to the local Docker database.
+PBAD_DSN=postgresql://pbad_ro:pbad_ro@localhost:5432/pbad
+
+# Per-statement timeout for that connection, in milliseconds. Guards against
+# a generated query that would otherwise run for hours.
+PBAD_TIMEOUT_MS=30000
