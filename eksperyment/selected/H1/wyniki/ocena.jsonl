@@ -1,0 +1,240 @@
+{"question_id": "Z01", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "v1", "reason": ""}
+{"question_id": "Z01", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z01", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z01", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z02", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z02", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z02", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K2", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z02", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z02", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z05", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z07", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z07", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "Z07", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "Z07", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N01", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N03", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N03", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "N03", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N03", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N03", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N04", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "v1", "reason": ""}
+{"question_id": "N04", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "v1", "reason": ""}
+{"question_id": "N04", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "v1", "reason": ""}
+{"question_id": "N04", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N04", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N04", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N04", "level": "K2", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "N04", "level": "K2", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "N04", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "N04", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N04", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N04", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J01", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K2", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K2", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J01", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J01", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J01", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J02", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K2", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K2", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J08", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J08", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J08", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J08", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J08", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J08", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J08", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J08", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J08", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J08", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J08", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J08", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A01", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A01", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A01", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A01", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A01", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A01", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A03", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A03", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A07", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "v1", "reason": ""}
+{"question_id": "A07", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A07", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "v2", "reason": ""}
+{"question_id": "A07", "level": "K3", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A07", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A07", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A08", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A08", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A08", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A08", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A08", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A08", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A08", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A08", "level": "K2", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "A08", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A08", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A08", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "A08", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M02", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M02", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M02", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M02", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M02", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M02", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M03", "level": "K0", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M03", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M03", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M03", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M03", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M03", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M03", "level": "K2", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "M03", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "v1", "reason": ""}
+{"question_id": "M03", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "M03", "level": "K3", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M03", "level": "K3", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M03", "level": "K3", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M05", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M05", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K2", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M05", "level": "K3", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M05", "level": "K3", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M05", "level": "K3", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M07", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M07", "level": "K0", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K1", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K1", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K1", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K2", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M07", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "M07", "level": "K3", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "M07", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "M07", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J05", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J05", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J05", "level": "K0", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J05", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J05", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J05", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J05", "level": "K2", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J05", "level": "K2", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J05", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "pusty wynik"}
+{"question_id": "J05", "level": "K3", "rep": 1, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J05", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J05", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J02", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K3", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "J02", "level": "K3", "rep": 2, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "J02", "level": "K3", "rep": 3, "executed": true, "correct": true, "matched": "wzorzec", "reason": ""}
+{"question_id": "N07", "level": "K0", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K0", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K0", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K1", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K1", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K1", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K2", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K2", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K2", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K3", "rep": 1, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K3", "rep": 2, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}
+{"question_id": "N07", "level": "K3", "rep": 3, "executed": true, "correct": false, "matched": "", "reason": "inny wynik"}

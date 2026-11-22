@@ -6,6 +6,7 @@ bez ponownego odpytywania modelu:
     python run_h1.py one Z02 --level K2      jedno pytanie, bez zapisu
     python run_h1.py run                     cała seria do wyniki/odpowiedzi.jsonl
     python run_h1.py exec                    wykonanie SQL-i na bazie
+    python run_h1.py compare                 porównanie z wzorcami i trafność
     python run_h1.py status                  postęp
 """
 
@@ -19,6 +20,7 @@ from rich.syntax import Syntax
 from rich.table import Table
 
 from experiment import Executor, Runner, Store, Trial, execute, load_questions, plan
+from experiment.compare import evaluate_all
 from llm import ContextLevel, SqlGenerator
 
 console = Console()
@@ -124,6 +126,48 @@ def cmd_exec(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_compare(args: argparse.Namespace) -> int:
+    with console.status("Liczę wzorce i porównuję...", spinner="dots"):
+        evaluations = evaluate_all()
+
+    table = Table(title="Trafność — eksperyment 1")
+    table.add_column("Pytanie")
+    for level in LEVELS:
+        table.add_column(level, justify="center")
+    for question in load_questions():
+        cells = []
+        for level in LEVELS:
+            group = [e for e in evaluations if e.question_id == question.id and e.level == level]
+            cells.append(f"{sum(e.correct for e in group)}/{len(group)}")
+        table.add_row(question.id, *cells)
+
+    counts = [
+        (sum(e.correct for e in group), len(group))
+        for group in ([e for e in evaluations if e.level == level] for level in LEVELS)
+    ]
+    totals = [hits / total for hits, total in counts]
+    table.add_section()
+    table.add_row("[bold]razem[/]", *[f"[bold]{t:.0%}[/]" for t in totals])
+    table.add_row(
+        "[dim]95% CI[/]",
+        *["[dim]{:.0%}–{:.0%}[/]".format(*_wilson(h, n)) for h, n in counts],
+    )
+    console.print(table)
+    for (a, b), (ta, tb) in zip(zip(LEVELS, LEVELS[1:]), zip(totals, totals[1:])):
+        console.print(f"przyrost {a} → {b}: [bold]{(tb - ta) * 100:+.1f} pp[/]")
+    console.print("[dim]Szczegóły: eksperyment/selected/H1/wyniki/ocena.jsonl[/]")
+    return 0
+
+
+def _wilson(hits: int, total: int, z: float = 1.96) -> tuple[float, float]:
+    if not total:
+        return (0.0, 0.0)
+    p = hits / total
+    centre = (p + z * z / (2 * total)) / (1 + z * z / total)
+    margin = z * ((p * (1 - p) / total + z * z / (4 * total * total)) ** 0.5) / (1 + z * z / total)
+    return (centre - margin, centre + margin)
+
+
 def cmd_status(args: argparse.Namespace) -> int:
     store = Store()
     rows = store.rows()
@@ -176,6 +220,9 @@ def _parser() -> argparse.ArgumentParser:
     execute_cmd = sub.add_parser("exec", help="wykonanie zapisanych SQL-i na bazie")
     execute_cmd.add_argument("--restart", action="store_true", help="od zera")
     execute_cmd.set_defaults(handler=cmd_exec, needs_key=False)
+
+    compare = sub.add_parser("compare", help="porównanie z wzorcami i trafność")
+    compare.set_defaults(handler=cmd_compare, needs_key=False)
 
     status = sub.add_parser("status", help="ile prób już jest")
     status.add_argument("--reps", type=int, default=3)

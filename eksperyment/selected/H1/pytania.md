@@ -27,7 +27,7 @@ Kategorie Z, N, J, A pochodzą z NALSpatial (praca 6 w przeglądzie literatury).
 | N01 | Jaki szpital jest najbliżej Pałacu Kultury i Nauki? | `name` | obie tabele `pois` (7 punktów, 37 poligonów) |
 | N03 | Jak daleko w metrach jest najbliższy urząd pocztowy od Dworca Centralnego i jak się nazywa? | `name`, odległość | `::geography`, nie stopnie |
 | N04 | Wymień 5 aptek położonych najbliżej Zamku Królewskiego. | `name` w kolejności | kolejność; obie tabele `pois` |
-| N07 | Wymień 3 przystanki autobusowe najbliższe pomnikowi pamięci Konstantego Juliana Ordona i podaj, jak daleko są w metrach. | `name` w kolejności, odległość | nazwa w bazie: „Pamięci Konstantego Juliana Ordona” |
+| N07 | Wymień 3 przystanki autobusowe najbliższe pomnikowi pamięci Konstantego Juliana Ordona w Rembertowie i podaj, jak daleko są w metrach. | `name` w kolejności, odległość | nazwa w bazie: „Pamięci Konstantego Juliana Ordona”; „Reduta Ordona” na Ochocie to inny obiekt |
 | J01 | Które szkoły w Warszawie mają w promieniu 300 metrów co najmniej jeden fast food? | `name` | obie tabele dla obu warstw; `name <> ''` tylko dla szkół, bo to one są wynikiem |
 | J02 | Ile przedszkoli w Warszawie nie ma żadnego parku w promieniu 500 metrów? | liczba | `NOT EXISTS`; parki tylko z `landuse` |
 | J05 | Wymień nazwy budynków stojących na terenie Łazienek Królewskich. | `name` | `name <> ''` — na terenie parku stoi 118 budynków, nazwanych jest 23; park jest w `landuse` i w `pois_a` |
@@ -40,6 +40,18 @@ Kategorie Z, N, J, A pochodzą z NALSpatial (praca 6 w przeglądzie literatury).
 | M03 | Jaka jest odległość w linii prostej w metrach między Pałacem Kultury i Nauki a Stadionem Narodowym? | odległość | nazwa „PGE Narodowy”; nie stacja o tej nazwie |
 | M05 | Ile kilometrów długości ma Wisła na odcinku w granicach Warszawy? | długość | suma odcinków; `ST_Intersection` |
 | M07 | Jaka jest odległość w linii prostej w kilometrach między Parkiem Planeta Ursus a Placem Bociani Zakątek? | odległość | oba obiekty z bazy |
+
+### Zmiana w zestawie: N07 doprecyzowane (22.11.2026)
+
+Pierwotne N07 nie wskazywało, o który pomnik chodzi. W bazie są dwaj realni
+kandydaci: pomnik „Pamięci Konstantego Juliana Ordona” w Rembertowie (ten miał
+na myśli autor pytania — wersja P3 w [pytania-testowe.md](../../draft/pytania-testowe.md)
+wprost mówi „w Rembertowie”) oraz trzy obiekty „Reduta Ordona” na Ochocie, które
+większość ludzi uzna za pomnik Ordona. Model w 12 próbach ani razu nie wybrał
+Rembertowa i zwykle szedł na Ochotę — to była dwuznaczność pytania, a nie brak
+wiedzy o danych. Do pytania dopisaliśmy „w Rembertowie” i wygenerowaliśmy N07
+od nowa. Stare odpowiedzi (N07 oraz zastąpione wcześniej J03) przeniesiono do
+`wyniki/odrzucone_odpowiedzi.jsonl` i `wyniki/odrzucone_wykonania.jsonl`.
 
 ## Ustalenia rozstrzygające niejasności
 
@@ -80,6 +92,20 @@ promptu — model ma dojść do nich sam albo polec, bo właśnie to mierzymy.
    granicznej, a odpowiedź modelu uznajemy za poprawną, jeśli zwrócił *dowolne*
    k obiektów zgodne z porządkiem i z kompletem obiektów powyżej progu. Dotyczy
    to realnie A03 (remis 39–39 na 5. miejscu); w N04 i N07 remisu nie ma.
+8. **Odległość od obiektu odniesienia** liczymy od jego obrysu **albo** od jego
+   środka (`ST_Centroid`, `ST_PointOnSurface`) — oba odczytania są naturalne
+   i oba uznajemy. Przykład: PKiN–Stadion to 2502 m między obrysami i ok. 2860 m
+   między środkami; od obrysu Placu Bociani Zakątek w 1 km jest 10 przedszkoli,
+   od jego środka 8.
+9. **Najbliższy obiekt bez nazwy.** Gdy pytanie prosi o najbliższe obiekty i ich
+   nazwy, a w czołówce jest obiekt bez nazwy, uznajemy obie odpowiedzi: z tym
+   obiektem albo z pominięciem go. Dotyczy N03 (urząd bez nazwy 49 m od dworca,
+   „Poczta Polska” 267 m) i N04 (bezimienna apteka na 4. miejscu). Wskazówkę
+   „pomijaj obiekty bez nazwy” dostaje dopiero K3, więc karanie za nią K0–K2
+   mierzyłoby znajomość konwencji, a nie danych. Przy pytaniach o listę nazw
+   (Z02, J01, J05, J08) pusta nazwa w wyniku pozostaje błędem.
+10. **Limit czasu wykonania** to 120 s. Przy 30 s sam wzorzec J02 przekraczał limit,
+    więc zapytania przerwane po 30 s wykonaliśmy ponownie.
 
 ### B. Obiekty odniesienia: który wiersz jest wzorcem
 
@@ -124,7 +150,7 @@ Pułapki po nazwie, celowo zostawione w pytaniach:
 | M05 | Wisła to 28 linii `waterways_free`, `fclass='river'`, `name='Wisła'` (380,1 km w województwie). Poligonów `riverbank` nie liczymy, bo to obszar, a nie długość. **Wzorzec: 29,40 km** w granicach Warszawy. |
 | J08 | most = odcinki `roads_free` z `bridge='T'` przecinające linie Wisły w granicach Warszawy. „Samochodowy" = odrzucamy `cycleway`, `footway`, `path`, `steps`, `pedestrian`, `track`. Uwaga: Most Świętokrzyski ma zarówno odcinek `tertiary`, jak i `cycleway`, więc filtr po `fclass` musi działać na poziomie odcinka, a nazwy trzeba zebrać przez `DISTINCT`. Wychodzi 9 mostów. |
 | J01, J02, J03 | parki wyłącznie z `landuse` (zasada A4); `name <> ''` tylko dla obiektu będącego wynikiem (szkoły w J01, parki w J03). |
-| N03 | wynik zawiera odległość, więc jest wrażliwy na wybór geometrii dworca (193 m vs 267 m) — oba warianty dopuszczalne, nazwa urzędu („Poczta Polska") jest w obu ta sama. |
+| N03 | wynik zawiera odległość, więc jest wrażliwy na wybór geometrii dworca (193 m vs 267 m) — oba warianty dopuszczalne; do tego wariant bez filtra nazwy (zasada A9): urząd bez nazwy, 49 m. |
 | Z01, N01, N04, A01, A07, M03, M07 | obiekt odniesienia zgodnie z tabelą w części B. |
 
 ## Do uzupełnienia: tokeny i trafność
@@ -134,19 +160,41 @@ Liczymy tokeny całego promptu, czyli instrukcji, kontekstu i pytania razem. Zap
 Zmierzone w serii z 21.11.2026 (240 wywołań, `claude-sonnet-5-5`, `effort: medium`),
 średnia z `usage.input_tokens` po 60 próbach na poziom.
 
-| Poziom | Tokeny promptu (średnia) | Tokeny odpowiedzi (średnia) | Trafność |
-|---|---|---|---|
-| K0 | 1 500 | 614 | — |
-| K1 | 2 828 | 592 | — |
-| K2 | 9 524 | 512 | — |
-| K3 | 12 160 | 546 | — |
+| Poziom | Tokeny promptu (średnia) | Tokeny odpowiedzi (średnia) | Trafność (z wariantami) | 95% CI | Trafność (tylko wzorzec) |
+|---|---|---|---|---|---|
+| K0 | 1 500 | 614 | **58%** (35/60) | 46–70% | 43% (26/60) |
+| K1 | 2 828 | 592 | **52%** (31/60) | 39–64% | 37% (22/60) |
+| K2 | 9 524 | 512 | **68%** (41/60) | 56–79% | 55% (33/60) |
+| K3 | 12 160 | 546 | **80%** (48/60) | 68–88% | 80% (48/60) |
+
+| Przyrost | Z wariantami | Tylko wzorzec |
+|---|---|---|
+| K0 → K1 (opis struktury) | −6,7 pp | −6,7 pp |
+| K1 → K2 (opis zawartości) | **+16,7 pp** | +18,3 pp |
+| K2 → K3 (wskazówki i przykłady) | +11,7 pp | **+25,0 pp** |
+
+Ocena z 22.11.2026 (`run_h1.py compare`, szczegóły w `wyniki/ocena.jsonl`). Trafność
+w kategoriach (z wariantami, K0/K1/K2/K3, na 12 prób): Z 9/8/11/12, N 8/6/6/9,
+J 2/0/5/11, A 9/9/11/11, M 7/8/8/5.
+
+**Wniosek zależy od reguł wariantów.** Przy ocenie zgodnej z zasadami A8–A9 (warianty
+dopuszczalne) największy jest przyrost K1 → K2, czyli H1 się potwierdza. Przy ścisłej
+ocenie tylko względem wzorca największy jest przyrost K2 → K3, czyli H1 jest obalona.
+Różnica bierze się z tego, że wzorce główne używają konwencji, które model dostaje
+dopiero w K3 (pomijanie obiektów bez nazwy, odległość od obrysu) — K3 nigdy nie
+potrzebuje wariantów, a K0–K2 potrzebują ich w 26 przypadkach. Reguły A8–A9 ustalono
+po obejrzeniu wyników, co trzeba uczciwie opisać w artykule. W obu wersjach różnica
+między przyrostami mieści się w przedziałach ufności, więc żadnego rozstrzygnięcia
+nie da się podać jako statystycznie istotnego.
 
 Wejście rośnie 8-krotnie między K0 a K3, a odpowiedzi lekko się skracają wraz
 z rosnącym kontekstem — model mniej się waha i krócej uzasadnia.
 
 ## Zapytania wzorcowe
 
-Zapytania leżą w [wzorce/](wzorce/), po jednym pliku `.sql` na pytanie. Kolumna
+Zapytania leżą w [wzorce/](wzorce/), po jednym pliku `.sql` na pytanie, a warianty
+dopuszczalne (zasady A8, A9 i tabela B) w plikach `<kod>.v<n>.sql`. Odpowiedź modelu
+jest poprawna, gdy zgadza się z wzorcem albo z którymkolwiek wariantem. Kolumna
 „Wynik" to wartość z bazy (zrzut 2026-11-20). **Każdy wzorzec wymaga jeszcze
 sprawdzenia przez drugą osobę** — na razie napisała je jedna.
 
@@ -157,18 +205,18 @@ sprawdzenia przez drugą osobę** — na razie napisała je jedna.
 | Z05 | [Z05.sql](wzorce/Z05.sql) | **7** | skwer jako park w `landuse` |
 | Z07 | [Z07.sql](wzorce/Z07.sql) | **500** | bez `fclass='admin_level6'` wynik rośnie do 1500 |
 | N01 | [N01.sql](wzorce/N01.sql) | **Szpital Kliniczny Dzieciątka Jezus**, 555 m | **pytanie nie różnicuje poziomów** — najbliższy szpital jest punktem, więc szukanie w samej tabeli punktowej też daje dobrą odpowiedź (najbliższy poligon to 956 m) |
-| N03 | [N03.sql](wzorce/N03.sql) | **Poczta Polska**, 267 m | od poligonu budynku dworca wychodzi 193 m, nazwa ta sama — wariant dopuszczalny |
+| N03 | [N03.sql](wzorce/N03.sql) | **Poczta Polska**, 267 m | warianty: od budynku dworca 193 m; bez filtra nazwy — urząd bez nazwy, 49 m |
 | N04 | [N04.sql](wzorce/N04.sql) | Apteka na Mariensztacie (190 m), Miejska (193), Hibiskus (810), Franciszkańska (898), Apteka Ojców Bonifratrów (938) | bez remisu na 5. miejscu (szósta jest 999 m); sama nazwa „Zamek Królewski" bez `fclass` trafia w dwa sklepy z pamiątkami |
-| N07 | [N07.sql](wzorce/N07.sql) | Oraczy 01 (443 m), Gontarska 01 (497), Oraczy 02 (527) | bez remisu (czwarty 553 m); w bazie są też trzy obiekty „Reduta Ordona" |
+| N07 | [N07.sql](wzorce/N07.sql) | Oraczy 01 (443 m), Gontarska 01 (497), Oraczy 02 (527) | pytanie doprecyzowane „w Rembertowie” (22.11); bez remisu (czwarty 553 m) |
 | J01 | [J01.sql](wzorce/J01.sql) | **527 nazw szkół** | lista za długa na plik tekstowy — porównujemy wynikiem zapytania |
 | J02 | [J02.sql](wzorce/J02.sql) | **324** | parki tylko z `landuse`; bez filtra po nazwie, bo liczymy |
 | J05 | [J05.sql](wzorce/J05.sql) | **23 nazwy** ([lista](wzorce/J05.out)) | zastąpiło J03 (21.11); bez `name <> ''` wychodzi 118 wierszy |
 | J08 | [J08.sql](wzorce/J08.sql) | **9 mostów**: Anny Jagiellonki, Gdański, Grota-Roweckiego, Ks. J. Poniatowskiego, Łazienkowski, M. Skłodowskiej-Curie, Siekierkowski, Śląsko-Dąbrowski, Świętokrzyski | Most Świętokrzyski ma odcinek `tertiary` i `cycleway` — filtr klas musi działać na odcinku, nie na nazwie |
 | A01 | [A01.sql](wzorce/A01.sql) | bar 123, cafe 176, fast_food 218, pub 24, restaurant 286 | wszystkie pięć typów musi się pojawić |
 | A03 | [A03.sql](wzorce/A03.sql) | Centrum 71, Nowy Świat-Uniwersytet 70, Rondo ONZ 57, Świętokrzyska 49, **Politechnika 39 = Warszawa Centralna 39** | remis na 5. miejscu — wzorzec ma 6 wierszy, ocena wg zasady A7. Cała piątka to stacje metra |
-| A07 | [A07.sql](wzorce/A07.sql) | przedszkola 10, szkoły 1 | |
+| A07 | [A07.sql](wzorce/A07.sql) | przedszkola 10, szkoły 1 | od środka placu: przedszkola 8, szkoły 1 — wariant dopuszczalny |
 | A08 | [A08.sql](wzorce/A08.sql) | do 300 m: **62**, dalej: **290** | razem 352 wypożyczalni w Warszawie |
-| M02 | [M02.sql](wzorce/M02.sql) | **5,61 km** | bez zawężenia do Warszawy 9,90 km |
-| M03 | [M03.sql](wzorce/M03.sql) | **2502 m** | między obrysami; centroid–centroid daje 2861 m, punkt `viewpoint` 2585 m |
+| M02 | [M02.sql](wzorce/M02.sql) | **5,61 km** | bez zawężenia do Warszawy 9,90 km. Ograniczenie: Marszałkowska to w OSM dwie jednokierunkowe jezdnie, więc to suma obu; sama ulica ma ok. 3,3 km. Żaden model nie podał 3,3, więc wzorzec zostaje |
+| M03 | [M03.sql](wzorce/M03.sql) | **2502 m** | warianty dopuszczalne: między środkami ok. 2860 m, od punktu `viewpoint` 2585 m |
 | M05 | [M05.sql](wzorce/M05.sql) | **29,40 km** | tylko linie `river`, bez poligonów koryta; w całym województwie Wisła ma 380,1 km |
 | M07 | [M07.sql](wzorce/M07.sql) | **19,98 km** | centroid–centroid daje 20,14 km, czyli w granicach 1% tolerancji |

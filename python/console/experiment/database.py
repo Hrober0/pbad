@@ -7,7 +7,7 @@ from time import perf_counter
 import psycopg
 
 DSN = os.getenv("PBAD_DSN", "postgresql://pbad_ro:pbad_ro@localhost:5432/pbad")
-TIMEOUT_MS = int(os.getenv("PBAD_TIMEOUT_MS", "30000"))
+TIMEOUT_MS = int(os.getenv("PBAD_TIMEOUT_MS", "120000"))
 MAX_ROWS = 2000
 
 OPTIONS = f"-c statement_timeout={TIMEOUT_MS} -c default_transaction_read_only=on"

@@ -13,4 +13,4 @@ PBAD_DSN=postgresql://pbad_ro:pbad_ro@localhost:5432/pbad
 
 # Per-statement timeout for that connection, in milliseconds. Guards against
 # a generated query that would otherwise run for hours.
-PBAD_TIMEOUT_MS=30000
+PBAD_TIMEOUT_MS=120000

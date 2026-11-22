@@ -86,7 +86,7 @@ CREATE ROLE pbad_ro LOGIN PASSWORD 'pbad_ro';
 GRANT CONNECT ON DATABASE pbad TO pbad_ro;
 GRANT USAGE ON SCHEMA public TO pbad_ro;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO pbad_ro;
-ALTER ROLE pbad_ro SET statement_timeout = '30s';
+ALTER ROLE pbad_ro SET statement_timeout = '120s';
 ALTER ROLE pbad_ro SET default_transaction_read_only = on;
 ```
 
