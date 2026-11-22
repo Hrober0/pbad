@@ -1,0 +1,47 @@
+# J05 — wynik wzorcowy
+
+> Wymień nazwy budynków stojących na terenie Łazienek Królewskich.
+
+Kolumna kluczowa: `name`, porównywana jako zbiór. Dane: zrzut Geofabrik 2026-11-20.
+
+23 nazwy:
+
+```
+Altana Chińska
+Biały Domek
+Dawna Oberża
+Dom Narutowicza
+Ermitaż
+Fundament Oranżerii Neogotyckiej
+Herbaciarnia
+Koszary Kantonistów
+Nowa Kordegarda
+Nowa Oranżeria
+Nowa Palmiarnia
+Oficyna Ermitażu
+Pałac Myślewicki
+Pałac na Wyspie
+Pawilon Chiński
+Plateau
+Podchorążówka
+Stajnie Kubickiego
+Stara Kordegarda
+Stara Oranżeria
+Świątynia Egipska
+Świątynia Sybilli
+Wodozbiór
+```
+
+## Sygnatury typowych błędów
+
+| Wynik modelu | Co się stało |
+|---|---|
+| **118 wierszy**, w tym puste nazwy | brak warunku `name <> ''` — na terenie parku stoi 118 budynków, ale tylko 23 mają nazwę. `name IS NOT NULL` niczego nie odfiltruje, bo brak nazwy to pusty napis |
+| 0 wierszy | nie znalazł parku: szukał Łazienek w `gis_osm_pois_free` (punktowym) albo z inną nazwą |
+| nazwy spoza parku | użył promienia zamiast przecięcia z obrysem |
+
+Warianty dające ten sam wynik, więc dopuszczalne: park wzięty z `gis_osm_pois_a_free`
+zamiast z `landuse` (ten sam `osm_id`, ta sama geometria) oraz `ST_Within` zamiast
+`ST_Intersects` (budynki leżą w całości wewnątrz).
+
+Zapytanie: [J05.sql](J05.sql).

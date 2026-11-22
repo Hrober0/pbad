@@ -292,7 +292,7 @@ Wskazówki dotyczące pisania zapytań:
 - Gdy pytanie prosi o nazwy obiektów, pomijaj obiekty bez nazwy warunkiem name <> ''. Brak nazwy zapisano jako pusty napis, więc name IS NOT NULL niczego nie odfiltruje. Przy zliczaniu i mierzeniu nie filtruj po nazwie.
 - Aby liczyć każdy obiekt raz, użyj COUNT(DISTINCT osm_id).
 - Obiekty referencyjne wybieraj z bazy po nazwie. Nie wpisuj współrzędnych ręcznie.
-- Nazwa w bazie może różnić się od nazwy z pytania, więc dopasowuj po fragmencie, np. name ILIKE '%Centralna%', a nie przez równość. Dopasowanie po nazwie zawsze łącz z warunkiem na fclass pasującym do rodzaju obiektu, bo tę samą nazwę nosi czasem mniejszy obiekt w środku (sklep, muzeum, przystanek).
+- Nazwa w bazie może różnić się od nazwy z pytania, więc dopasowuj po fragmencie, np. name ILIKE '%Powązkowski%', a nie przez równość. Dopasowanie po nazwie zawsze łącz z warunkiem na fclass pasującym do rodzaju obiektu, bo tę samą nazwę nosi czasem mniejszy obiekt w środku (sklep, muzeum, przystanek).
 - Gdy obiekt odniesienia występuje jednocześnie jako poligon i jako punkt w różnych tabelach, bierz poligon — on jest obrysem całego obiektu, a punkt bywa tylko jednym miejscem w jego wnętrzu albo punktem widokowym na zewnątrz.
 - Zawężaj wyniki do Warszawy przez przecięcie z jej granicą, bo dane obejmują całe województwo.
 

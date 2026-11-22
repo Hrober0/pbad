@@ -75,8 +75,8 @@ Na poziomach K1–K3 zmienia się tylko część „Opis bazy danych”. Model o
   - czy liczy odległość w metrach (`geography`), a nie w stopniach,
   - czy uwzględnia kawiarnie zapisane jako poligony.
 - **Czego się spodziewamy:**
-  - **K0–K1:** model szuka `name = 'Dworzec Centralny'` i dostaje pusty wynik albo wpisuje współrzędne dworca z pamięci.
-  - **K2:** zna prawdziwą nazwę z opisu danych, więc większość prób powinna być poprawna.
+  - **K0–K1:** model szuka `name = 'Dworzec Centralny'` i dostaje pusty wynik albo wpisuje współrzędne dworca z pamięci. Uwaga: przy dopasowaniu `ILIKE '%Dworzec Centralny%'` wynik nie będzie pusty — w bazie są 22 przystanki autobusowe i 4 tramwajowe o takiej nazwie, więc zapytanie zwróci sensownie wyglądające kawiarnie wokół przypadkowego przystanku.
+  - **K2:** żaden poziom nie podaje nazwy „Warszawa Centralna" — model musi ją znać z własnej wiedzy o OSM albo znaleźć w bazie. Przyrost na K2 powinien wynikać z wiedzy o podziale na tabele punktową i poligonową, a nie z nazwy. W pierwszej próbie (21.11) model na K2 trafił nazwę sam i jawnie opisał to jako założenie w polu `explanation`.
   - **K3:** poprawne prawie zawsze.
 
 ### N01: najbliższy szpital od PKiN

@@ -1,0 +1,55 @@
+# Z02 — wynik wzorcowy
+
+> Wymień nazwy kawiarni w promieniu 300 metrów od Dworca Centralnego.
+
+Kolumna kluczowa: `name`, porównywana jako **zbiór** (kolejność bez znaczenia,
+napisy dokładnie). Dane: zrzut Geofabrik 2026-11-20.
+
+## Wariant główny — punkt stacji `Warszawa Centralna`
+
+19 nazw:
+
+```
+Ben's Tea
+Bonjour
+Caffè Nero
+Cofix
+Corner Cafe
+Costa
+Crazy Bubble
+Gorąco Polecam
+Green Caffè Nero
+Og Boba
+Paul
+Pijalnia Czekolady E. Wedel
+So! coffee
+So! Coffee
+Starbucks
+Turnus
+Velvet
+Wonders of Asia
+Work Café Santander
+```
+
+Rozkład źródeł: 14 wierszy z `gis_osm_pois_free` i 10 z `gis_osm_pois_a_free`
+(24 wiersze, 19 różnych nazw — „So! coffee" i „So! Coffee" to dwa różne zapisy,
+oba zostają, bo napisy porównujemy dokładnie).
+
+## Wariant dopuszczalny — poligon budynku `Warszawa Centralna`
+
+23 nazwy: wszystkie powyższe plus `Cafe 21⁰E`, `Semifreddo`, `Tudel`,
+`Your Coffee`. Budynek jest rozległy, więc 300 m liczone od jego obrysu sięga
+dalej niż od punktu stacji. Odpowiedź w tym wariancie uznajemy za poprawną
+i oznaczamy kodem `inna_geometria_odniesienia`.
+
+## Sygnatury typowych błędów
+
+| Wynik modelu | Co się stało |
+|---|---|
+| 13 nazw (bez `Ben's Tea`, `Caffè Nero`, `Cofix`, `Gorąco Polecam`, `Og Boba`, `Paul`) | użył tylko `gis_osm_pois_free`, pominął kawiarnie zapisane jako poligony → `zla_tabela` |
+| 0 wierszy | szukał `name = 'Dworzec Centralny'` — w bazie nie ma ani jednego takiego obiektu |
+| nazwy przystanków albo kawiarnie przy innym punkcie | dopasował `name ILIKE '%Dworzec Centralny%'`, co trafia w **26 przystanków** (22 autobusowe, 4 tramwajowe) o nazwach w rodzaju „Dworzec Centralny 01" → `zla_tabela` / zły obiekt odniesienia |
+| setki nazw (ok. 821) | `ST_DWithin` bez `::geography`, czyli 300 **stopni** zamiast metrów → `stopnie_zamiast_metrow` |
+| nazwy z pustym napisem w wyniku | brak warunku `name <> ''` |
+
+Zapytanie: [Z02.sql](Z02.sql).
