@@ -32,39 +32,40 @@ Pytania są w wersji naturalnej (P2) z [pytania-testowe.md](pytania-testowe.md).
 
 Każda próba to jedno wywołanie API bez historii rozmowy. Model dostaje jedną wiadomość złożoną z trzech części:
 
-1. **Instrukcja zadania.** Jest taka sama we wszystkich próbach: rola, format odpowiedzi i konwencje oceny (przecięcie z obszarem, liczenie raz, pomijanie obiektów bez nazwy, jednostki). Pełna treść: [poziomy-kontekstu.md](poziomy-kontekstu.md#część-wspólna-dla-wszystkich-poziomów).
+1. **Instrukcja zadania.** Jest taka sama we wszystkich próbach: rola i zadanie. Nie zawiera konwencji oceny — fakty o danych są w K2, a wskazówki w K3. Format odpowiedzi (`{"sql", "explanation"}`) wymusza schemat JSON. Pełna treść: [poziomy-kontekstu.md](poziomy-kontekstu.md#część-wspólna-dla-wszystkich-poziomów).
 2. **Opis bazy danych na jednym z poziomów K0–K3.** To jedyna część, która zmienia się między wariantami eksperymentu.
 3. **Treść pytania.** Jest to dokładnie tekst z cytatu przy każdym przykładzie poniżej, np. „Wymień nazwy kawiarni w promieniu 300 metrów od Dworca Centralnego.”
 
 Model nie dostaje niczego więcej. Nie widzi punktów „Co sprawdzamy” i „Czego się spodziewamy”, zapytania wzorcowego, nazw obiektów w bazie (chyba że są w opisie bazy na K2–K3) ani błędów z poprzednich prób.
 
-Przykład pełnego promptu dla Z02 na poziomie K0 (opis bazy skrócony):
+Przykład pełnego promptu dla Z02 na poziomie K0 (opis bazy skrócony). Instrukcja
+z kontekstem idzie jako prompt systemowy, pytanie jako wiadomość użytkownika:
 
 ```text
-Jesteś asystentem, który tłumaczy pytania w języku polskim na zapytania SQL
+[system]
+Jesteś asystentem, który na podstawie pytania użytkownika buduje zapytanie SQL
 dla bazy PostgreSQL 18 z rozszerzeniem PostGIS 3.6.
 
-Zwróć dokładnie jedno zapytanie SELECT w bloku ```sql ... ```, bez dodatkowych wyjaśnień.
-Nie modyfikuj danych.
+Wygeneruj jedno zapytanie SELECT odpowiadające na pytanie użytkownika.
+Jeśli pytanie nie może zostać wyrażone jako zapytanie SQL, zwróć pusty
+ciąg w polu sql i wyjaśnij przyczynę w polu explanation.
 
-Obowiązujące konwencje:
-1. Obiekt należy do obszaru, jeśli się z nim przecina. W pytaniach o długość lub
-   powierzchnię „w granicach” obszaru licz tylko część leżącą wewnątrz obszaru.
-2. Każdy obiekt licz tylko raz.
-3. Pomijaj obiekty bez nazwy, zarówno w wynikach, jak i przy liczeniu.
-4. Odległości podawaj w metrach, długości w metrach lub kilometrach, powierzchnie
-   w metrach kwadratowych lub hektarach, zgodnie z pytaniem.
+Wynik zapytania ma odpowiadać dokładnie na pytanie.
 
-Opis bazy danych:
-gis_osm_pois_free(fid, osm_id, code, fclass, name, geom)
-gis_osm_pois_a_free(fid, osm_id, code, fclass, name, geom)
-gis_osm_transport_free(fid, osm_id, code, fclass, name, geom)
+Poniżej znajdziesz dodatkowe informacje o bazie danych, które mogą pomóc
+w zbudowaniu zapytania.
+
+Tabele (nazwy kolumn w nawiasach):
+gis_osm_adminareas_a_free(fid, osm_id, code, fclass, name, geom)
 ... (pozostałe tabele gis_osm_*)
 
+[user]
 Pytanie: Wymień nazwy kawiarni w promieniu 300 metrów od Dworca Centralnego.
 ```
 
-Na poziomach K1–K3 zmienia się tylko część „Opis bazy danych”. Model odpowiada blokiem ```` ```sql ```` z jednym zapytaniem. Skrypt wycina to zapytanie, wykonuje je na bazie i porównuje wynik z wynikiem zapytania wzorcowego.
+Na poziomach K1–K3 zmienia się tylko opis bazy. Model odpowiada obiektem JSON
+`{"sql": "...", "explanation": "..."}`. Skrypt wykonuje `sql` na bazie i porównuje
+wynik z wynikiem zapytania wzorcowego.
 
 ### Z02: kawiarnie przy Dworcu Centralnym
 

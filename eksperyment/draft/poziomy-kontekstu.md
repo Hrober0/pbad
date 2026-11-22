@@ -15,19 +15,27 @@ Opis tego, co model dostaje w prompcie na każdym poziomie kontekstu. Poziom kon
 Każdy prompt zaczyna się tą samą instrukcją zadania. Opisuje ona samo zadanie, a nie dane, więc nie zmienia się między poziomami. Cała wiedza o bazie jest w kontekście, bo to ona jest badanym czynnikiem.
 
 ```text
+[system]
 Jesteś asystentem, który na podstawie pytania użytkownika buduje zapytanie SQL
 dla bazy PostgreSQL 18 z rozszerzeniem PostGIS 3.6.
 
-Zbuduj jedno zapytanie SELECT, które odpowiada na zadane pytanie.
-Nie modyfikuj danych.
+Wygeneruj jedno zapytanie SELECT odpowiadające na pytanie użytkownika.
+Jeśli pytanie nie może zostać wyrażone jako zapytanie SQL, zwróć pusty
+ciąg w polu sql i wyjaśnij przyczynę w polu explanation.
+
+Wynik zapytania ma odpowiadać dokładnie na pytanie.
 
 Poniżej znajdziesz dodatkowe informacje o bazie danych, które mogą pomóc
 w zbudowaniu zapytania.
 
 <KONTEKST K0 / K1 / K2 / K3>
 
+[user]
 Pytanie: <PYTANIE>
 ```
+
+Tekst jest dosłowną kopią `INSTRUCTION` z [python/console/llm/prompt.py](../../python/console/llm/prompt.py),
+z którego korzystała seria z 21.11.2026.
 
 Instrukcja jest celowo krótka. Formatu odpowiedzi nie opisujemy słowami, bo wymusza
 go schemat JSON przekazany w `output_config.format`: model zwraca obiekt z polami

@@ -48,7 +48,9 @@ Przy znanych obiektach (PKiN, Stadion Narodowy) model może zamiast tego wpisać
 
 ### Reguły obowiązujące we wszystkich pytaniach
 
-Reguły 1–3 zawiera instrukcja zadania na **każdym** poziomie kontekstu (K0–K3), bo to konwencje oceny, a nie wiedza o danych.
+> **Nieaktualne (22.11.2026).** Ta wersja reguł obowiązywała, gdy instrukcja zadania zawierała konwencje oceny. Ostateczny prompt ich nie zawiera ([poziomy-kontekstu.md](poziomy-kontekstu.md#część-wspólna-dla-wszystkich-poziomów)), a obowiązujące zasady oceny eksperymentu 1 są w sekcji „Ustalenia rozstrzygające niejasności” w [selected/H1/pytania.md](../selected/H1/pytania.md). Najważniejsza różnica: reguła 3 przestała obowiązywać — obiektów bez nazwy nie pomijamy przy liczeniu (przy niej J02 dałoby 454 zamiast 324, a Z05 6 zamiast 7).
+
+Pierwotnie: reguły 1–3 zawierała instrukcja zadania na **każdym** poziomie kontekstu (K0–K3), bo to konwencje oceny, a nie wiedza o danych.
 
 1. **Obiekt należy do obszaru, gdy się z nim przecina** (`ST_Intersects`). Dotyczy to też obiektów na granicy obszaru. W pytaniach o długość lub powierzchnię „w granicach” obszaru (M02, M05, M08) liczymy tylko część wewnątrz, czyli `ST_Intersection`.
 2. **Każdy obiekt liczymy raz,** z deduplikacją po `osm_id`.
