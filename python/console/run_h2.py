@@ -13,6 +13,12 @@ Kroki są rozdzielone, żeby analizę dało się powtórzyć bez odpytywania mod
     python run_h2.py show 15a              odpowiedzi i odczyty jednego wariantu
     python run_h2.py replicate             seria kontrolna (2 próby/wariant) do wyniki/replikacja.jsonl
 
+Sprawdzenie dodatkowe z dostępem do bazy (h2/with_db.py, osobny plik wyników):
+
+    python run_h2.py zbaza --only 24 15a --reps 3   model może wykonywać SELECT-y narzędziem run_sql
+    python run_h2.py zbaza-raport                   porównanie z serią główną → wyniki/z_baza.md
+    python run_h2.py zbaza-show 24                  kroki i końcowe SQL jednego wariantu
+
 Ręczne poprawki odczytów: wyniki/korekty.json (opis w ocena.md).
 """
 
@@ -166,6 +172,60 @@ def cmd_replicate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_db_run(args: argparse.Namespace) -> int:
+    from h2.with_db import DbGenerator, store
+
+    answers = store()
+    variants = [v for v in load_variants() if v.id in set(args.only) or v.part in set(args.only)]
+    if not variants:
+        console.print("[red]Podaj warianty albo części w --only, np. --only 24 15a 2d[/]")
+        return 1
+    trials = plan(variants, args.reps, answers.done())
+    if not trials:
+        console.print("[green]Wszystkie próby już są.[/]")
+        return 0
+    console.print(f"[cyan]{len(trials)}[/] prób z dostępem do bazy, {args.workers} równolegle → {answers.path}")
+    failures = 0
+    for index, answer in enumerate(DbGenerator().run(trials, answers, args.workers), start=1):
+        failures += bool(answer.error)
+        mark = "[red]x[/]" if answer.error else "[green]ok[/]"
+        tokens = answer.input_tokens + answer.cache_read_tokens + answer.cache_write_tokens
+        console.print(
+            f"{index:>3}/{len(trials)} {mark} {answer.variant:<4} #{answer.rep} "
+            f"[dim]{len(answer.steps)} zapytań · {tokens}+{answer.output_tokens} tok "
+            f"(cache {answer.cache_read_tokens}) · {answer.latency_s}s[/]"
+            + (f" [red]{answer.error[:120]}[/]" if answer.error else "")
+        )
+    console.print(f"Gotowe. Błędów: {failures}")
+    return 1 if failures else 0
+
+
+def cmd_db_report(args: argparse.Namespace) -> int:
+    from h2.with_db import report
+
+    console.print(report())
+    return 0
+
+
+def cmd_db_show(args: argparse.Namespace) -> int:
+    from h2.with_db import store
+
+    rows = sorted((a for a in store().good() if a["variant"] == args.variant), key=lambda a: a["rep"])
+    if not rows:
+        console.print(f"[yellow]Brak prób z bazą dla {args.variant}[/]")
+        return 1
+    console.print(f"[cyan]{args.variant}[/] {rows[0]['question']}")
+    for answer in rows:
+        console.rule(f"#{answer['rep']} · {len(answer['steps'])} zapytań narzędzia")
+        for step in answer["steps"]:
+            console.print(f"[dim]krok {step['krok']}: {step['wiersze']} wierszy {step['blad']}[/]")
+            console.print(Syntax(step["sql"], "sql", theme="ansi_dark", word_wrap=True))
+        console.print("[bold]końcowe:[/]")
+        console.print(Syntax(answer["sql"], "sql", theme="ansi_dark", word_wrap=True))
+        console.print(f"[yellow]uwagi:[/] {answer['uwagi']}")
+    return 0
+
+
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(required=True)
@@ -197,6 +257,19 @@ def _parser() -> argparse.ArgumentParser:
     show = sub.add_parser("show")
     show.add_argument("variant")
     show.set_defaults(handler=cmd_show, needs_key=False)
+
+    db_run = sub.add_parser("zbaza", help="sprawdzenie dodatkowe: model z dostępem do bazy (wyniki/z_baza.jsonl)")
+    db_run.add_argument("--only", nargs="+", required=True, help="kody wariantów albo części, np. 24 15a 2d")
+    db_run.add_argument("--reps", type=int, default=3)
+    db_run.add_argument("--workers", type=int, default=3)
+    db_run.set_defaults(handler=cmd_db_run, needs_key=True)
+
+    sub.add_parser("zbaza-raport", help="porównanie z serią główną (wyniki/z_baza.md)").set_defaults(
+        handler=cmd_db_report, needs_key=False)
+
+    db_show = sub.add_parser("zbaza-show", help="kroki i końcowe SQL jednego wariantu z bazą")
+    db_show.add_argument("variant")
+    db_show.set_defaults(handler=cmd_db_show, needs_key=False)
     return parser
 
 

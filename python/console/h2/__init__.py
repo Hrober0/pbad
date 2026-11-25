@@ -10,4 +10,5 @@ Moduły:
     analyze    opisowe porównania wariantów według ocena.md (bez testów statystycznych)
     report     tabele markdown do wyniki/tabele.md
     replicate  seria kontrolna w osobnym pliku (poza analizą)
+    with_db    sprawdzenie dodatkowe: model z dostępem do bazy (narzędzie run_sql), osobny plik wyników
 """

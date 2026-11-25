@@ -22,6 +22,7 @@ Materiał do artykułu. Pytania: [pytania.md](pytania.md). Sposób oceny: [ocena
 14. [Wnioski do artykułu](#14-wnioski-do-artykułu)
 15. [Jak powtórzyć](#15-jak-powtórzyć)
 16. [Szkielet części artykułu o PB2](#16-szkielet-części-artykułu-o-pb2)
+17. [Sprawdzenie dodatkowe: model z dostępem do bazy](#17-sprawdzenie-dodatkowe-model-z-dostępem-do-bazy)
 
 ---
 
@@ -95,7 +96,8 @@ Obserwacje są ułożone według PB2: najpierw jak model interpretuje niejasne o
    - „Łazienki” to park Łazienki Królewskie w 40 na 40 prób, nigdy przysiółek Łazienki (99 km). „Najbliższa stacja metra” to Centrum albo Politechnika (20/20), rozpoznane jako stacje przy torach metra.
    - „Od metra do Gmachu Głównego PW” (pytanie dodatkowe, 2h): „metro” to zawsze stacja Politechnika (10/10), nigdy przystanek „Metro Politechnika” (§7.7).
    - Przy pomnikach model szuka właściwego obiektu, ale słabo trafia w jego zapis w bazie: dobry obiekt w 19 na 60 prób, przy obiektach kontrolnych w 5 na 30. Powodem jest zbyt ścisłe zgadywanie tabeli, `fclass` i formy nazwy (np. „Małego Powstańca” zamiast „Mały Powstaniec”), czyli dopasowanie do danych, a nie interpretacja nazwy (§7.3).
-   - **Ukryte wybory:** ta sama odległość Łazienki–PKiN raz od obrysu parku (2042 m), raz od jego środka (2778 m), różnica 36%. Dopisek „nad Wisłą” przy pomniku Syrenki nie zmienia zapytania (10/10 ta sama rzeźba; §7.1).
+   - **Dodatkowe wybory zmieniają się między próbami:** ta sama odległość Łazienki–PKiN raz od obrysu parku (2042 m), raz od jego środka (2778 m), różnica 36%. Sposób pomiaru model podaje w uwagach w 20 na 20 prób, ale tylko w 6 wspomina, że można mierzyć inaczej.
+   - **Dopisek „nad Wisłą” model pomija po cichu:** 10 na 10 prób to ta sama rzeźba, a w 9 na 10 uwagi w ogóle nie wspominają Wisły (§7.1).
 
 ### E. Czy model mówi o swojej interpretacji
 
@@ -535,7 +537,7 @@ Dlatego zostajemy przy 10 próbach. Wnioski o kierunku efektów są stabilne, a 
 1. **Jak model interpretuje niejasne określenia (pierwsza część PB2):** zawsze jako jedną konkretną, okrągłą wartość (11 różnych promieni na 470), powtarzalną między próbami (w 52 z 56 pytań ta sama wartość w co najmniej 6 na 10 prób). Model ma więc stałe wartości domyślne, a nie losuje.
 2. **Czy kontekst zmienia przyjętą wartość (druga część PB2):** tak, wszystkie trzy czynniki przesuwają ją w zdroworozsądkowym kierunku. Kolejność siły jest jednak inna, niż zakładaliśmy: rodzaj obiektu (9/9 par, zakresy rozłączne) > miejsce (9/9) > podana wprost sytuacja pytającego (6/8). W skali możliwych odpowiedzi z planu (od „żaden czynnik nie działa” do „wszystkie trzy działają”) wynik leży blisko drugiego końca, z zastrzeżeniem z punktu 3.
 3. **Jak kontekst działa: zgrubnie, szufladkami.** Centrum Warszawy 500 m, a wszystko inne 1000 m (wieś tak samo jak Radom); „duży” zależy od miasta, „mały” nie; rower dalej niż samochód; po angielsku samochód zmienia mniej. Model reaguje na pojedyncze cechy pytania (rodzaj obiektu, „centrum Warszawy”, rower), a nie na sytuację jako całość.
-4. **Nazwy potoczne:** model przyjmuje najbardziej znane znaczenie (Łazienki Królewskie, stacja metra Politechnika, nigdy przystanek „Metro Politechnika”). Wybory dodatkowe (od obrysu czy od środka, „nad Wisłą”) robi po cichu. Przy małych obiektach interpretacja jest właściwa, ale trafienie w zapis w bazie słabe (pomniki 19/60).
+4. **Nazwy potoczne:** model przyjmuje najbardziej znane znaczenie (Łazienki Królewskie, stacja metra Politechnika, nigdy przystanek „Metro Politechnika”). Sposób pomiaru zmienia się między próbami (od obrysu albo od środka); model go podaje, ale rzadko zaznacza, że to wybór (6 na 20). Dopisek „nad Wisłą” pomija bez słowa (9 na 10 uwag nie wspomina Wisły). Przy małych obiektach interpretacja jest właściwa, ale trafienie w zapis w bazie słabe (pomniki 19/60).
 5. **Jawność interpretacji:** przyjętą wartość model podaje prawie zawsze i zgodnie z SQL (549/549), ale niejasność pytania zgłasza prawie wyłącznie wtedy, gdy czegoś w nim brakuje (miasta, stacji, środka transportu). Samo niejasne słowo nie jest dla niego problemem: „w pobliżu” 0 zgłoszeń na 230 prób.
 6. **Odniesienie do literatury:** AmbiQT (praca 10) pokazuje, że modele trzymają się jednej interpretacji niejednoznacznego pytania. Nasze wyniki to potwierdzają (powtarzalność) i dokładają brakujący element: ta jedna interpretacja zależy od kontekstu pytania, w opisany wyżej, szufladkowy sposób.
 7. **Skutki (zależne od ustawienia):** stała wartość daje pusty wynik tam, gdzie obiektów jest mało (Krusze, Płudy, parki w Radomiu, 9–10 na 10 prób), a jedna wskazówka w kontekście przestawia rozstrzyganie nazw (2g: mniej pustych wyników, ale więcej trafień w zupełnie inne obiekty).
@@ -544,7 +546,7 @@ Dlatego zostajemy przy 10 próbach. Wnioski o kierunku efektów są stabilne, a 
    - nie liczyć na to, że model sam zgłosi niejasność: przy niejasnych słowach („w pobliżu”, „duży”) nie zgłasza jej prawie nigdy,
    - przy nazwach potocznych sprawdzać, który obiekt został wybrany, a nie tylko, czy wynik nie jest pusty,
    - do oceny takich systemów potrzeba co najmniej ok. 10 powtórzeń, bo rzadkie zachowania przy 5 próbach są niewidoczne (§11).
-9. **Charakter badania i możliwe rozszerzenia:** badanie jest eksploracyjne: jeden model, jedno ustawienie (bez dostępu do danych, bez możliwości dopytania), 10 prób na pytanie, a ocenę rozsądnej wartości przyjmujemy sami. Naturalne rozszerzenia to: kilka modeli (czy wartości domyślne i szufladki są cechą ogólną), wariant z dostępem do bazy (czy model dopasuje wartość do danych), możliwość dopytania użytkownika oraz sprawdzenie, na ile przyjmowana wartość zależy od wiedzy modelu o konkretnym miejscu (np. czy rozpoznaje miejscowość jako wieś).
+9. **Charakter badania i możliwe rozszerzenia:** badanie jest eksploracyjne: jeden model, jedno ustawienie (bez dostępu do danych, bez możliwości dopytania), 10 prób na pytanie, a ocenę rozsądnej wartości przyjmujemy sami. Naturalne rozszerzenia to: kilka modeli (czy wartości domyślne i szufladki są cechą ogólną), pełna seria z dostępem do bazy i na innych modelach (sprawdzenie w §17, 5 prób na pytanie: domyślne wartości zostają, ale model zmienia je, gdy dane pokazują pusty wynik albo gdy w bazie jest gotowa definicja, a błędy przy nazwach potocznych prawie znikają), możliwość dopytania użytkownika oraz sprawdzenie, na ile przyjmowana wartość zależy od wiedzy modelu o konkretnym miejscu (np. czy rozpoznaje miejscowość jako wieś).
 
 ---
 
@@ -591,7 +593,7 @@ Propozycja, jak ułożyć tę część artykułu. Przy każdym punkcie: liczby d
 2. **Powtarzalność** (§2, punkt 2; §9.3). 27/56 pytań identycznie w 10 na 10, 52/56 w co najmniej 6 na 10.
 3. **Kontekst działa, w innej kolejności niż zakładaliśmy** (§2 B, §3.2). Rodzaj obiektu 9/9 (zakresy rozłączne), miejsce 9/9, sytuacja 6/8. **Proponowana Tabela 2:** promienie z §3.1 (obiekt × miejsce × sytuacja).
 4. **Szufladki** (§2 C, §8.1, §6, §8.3). Centrum Warszawy 500 m, reszta 1000 m (wieś jak Radom); „duży” 20/10/5 ha, „mały” 1 ha; rower 1500 m > samochód 1000 m, z wyjaśnieniem z uwag. **Proponowany rysunek:** promień dla kolejnych miejscowości (gradient z §8.1).
-5. **Nazwy potoczne** (§2 D, §7.1, §7.7). Najbardziej znane znaczenie (Łazienki 40/40, metro: Politechnika 10/10, nigdy przystanek); ukryte wybory (obrys czy środek, „nad Wisłą”).
+5. **Nazwy potoczne** (§2 D, §7.1, §7.7). Najbardziej znane znaczenie (Łazienki 40/40, metro: Politechnika 10/10, nigdy przystanek); wybory zmienne między próbami (obrys czy środek, podane w uwagach) i pominięty bez słowa dopisek „nad Wisłą”.
 6. **Jawność interpretacji** (§2 E, §9.2, §9.6). Wartość podana w 556/560, zgodna z SQL 549/549; niejasność zgłoszona w 11/560, prawie wyłącznie gdy czegoś brakuje (miasto, stacja, środek transportu), przy „w pobliżu” 0/230.
 7. **Skutki, krótko** (§2 F). Puste wyniki na wsi, przy Płudach i w Radomiu; wskazówka w 2g przestawia rozstrzyganie nazw (14 → 38/80 dobrych, ale 5 → 20 dużych pomyłek).
 
@@ -611,3 +613,40 @@ Badanie eksploracyjne: jeden model, jedno ustawienie (bez dostępu do danych, be
 ### Uwaga o liczbach
 
 Przy cytowaniu podawać rozkład („500 ×9, 1000 ×1”), a nie tylko medianę. Przy wariantach „pół na pół” mediana nie odpowiada żadnej próbie (§12, punkt 1). Pełne tabele: [wyniki/tabele.md](wyniki/tabele.md).
+
+---
+
+## 17. Sprawdzenie dodatkowe: model z dostępem do bazy
+
+**Ustawienie.** Te same pytania co w części głównej (2a–2f i pytanie o metro z 2h; bez 2g), ten sam model, effort i kontekst K2. Różnica: model ma narzędzie `run_sql`, którym może wykonywać zapytania SELECT na bazie (rola tylko do odczytu, widzi do 20 wierszy wyniku), zanim poda końcową odpowiedź `{"sql", "uwagi"}`. Do instrukcji dochodzi jeden neutralny akapit o narzędziu. 5 prób na pytanie, 375 prób, 25.11.2026, 0 błędów API. Kod: `h2/with_db.py`; pełna tabela: [wyniki/z_baza.md](wyniki/z_baza.md); kroki każdej próby: `python run_h2.py zbaza-show <wariant>`.
+
+### 17.1. Obserwacje do artykułu
+
+1. **Wartości domyślne zostają.** W 34 z 56 pytań z przyjętą wartością dominująca wartość jest taka sama jak bez bazy:
+   - „w pobliżu” apteki w centrum Warszawy 500 m (5/5), szpitala 2000 m (4/5),
+   - Radom i Siedlce 1000 m (5/5), Tłuszcz 1000 m (4/5), więc szufladka „centrum Warszawy a reszta” zostaje,
+   - „mały park” 1 ha (14/15), „duży park” w Warszawie 20 ha (5/5), „najbliższe” 10 obiektów (5/5),
+   - rower 1500 m (3/5) więcej niż samochód 1000 m (5/5), jak bez bazy.
+
+   Model nie dopasowuje wartości do gęstości obiektów, jeśli wynik nie jest pusty.
+2. **Model zmienia wartość, gdy dane pokazują, że nie działa.** Puste wyniki: **60 na 560 prób bez bazy → 1 na 280 z bazą.**
+   - wieś Krusze: 1000 i 2000 m → 6000 m w 8 na 10 prób, raz 10 000 m („najbliższa apteka jest ok. 5,4 km od stacji”); raz model zostawił 1000 m i świadomie zwrócił pusty wynik, pisząc, że najbliższe apteki są 5,4 km dalej,
+   - szpitale przy Płudach: 1,5–3 km → 3,5–5 km,
+   - „duże parki” w Radomiu: 10 ha → 3–5 ha (5/5); w 2 próbach model pisze wprost, że próg postawił w miejscu „wyraźnej przerwy” między wielkościami parków.
+3. **Model sięga po gotową strukturę z bazy zamiast wartości z pamięci.** To jakościowa zmiana interpretacji:
+   - **„w centrum Warszawy” i „w centrum” bez miasta to dzielnica Śródmieście w 15 na 15 prób** (bez bazy: koło 1,5 km wokół punktu z pamięci, granica dzielnicy w 0 na 50),
+   - przy lotnisku model mierzy od obrysu lotniska (15/15) i bierze 500 m zamiast 1000 m od punktu,
+   - w Płocku „duży park” to 1 ha (5/5), czyli tyle samo co „mały”: próg względny wobec danych może zatrzeć różnicę między określeniami.
+4. **Mniej odmów przy czasie dojazdu.** Bez środka transportu: odmowa 10/10 → zawsze marsz pieszo, 1250 m (5/5). Samochodem: odmowa 10/10 → odmowa 3/5, a 2 razy promień 5–6 km opisany jako „moje założenie” o 15 minutach jazdy w mieście.
+5. **Błędy przy nazwach potocznych prawie znikają.** Dobry obiekt w **73 na 80 prób** (bez bazy 94 na 160). Pomnik Chopina, Syrenka Warszawska, Kolumna Zygmunta, Mały Powstaniec i palma są trafione 5 na 5 (pomnik Chopina „w Łazienkach” 4 na 5 i jedna odległość nieprzypisana). Model ogląda kandydatów i sam wybiera: „W bazie jest wiele obiektów o nazwie z Chopinem, więc wybrałem ten pomnik”. „Od metra do Gmachu Głównego PW”: pusty 10/10 → poprawna odległość 5/5.
+6. **Błędy, które zostają, to błędy wiedzy modelu, a nie danych.** Wyraźnie złych albo pustych odpowiedzi jest ok. 7 na 375 prób (bez bazy: 60 pustych wyników przy wartościach i 64 złe albo puste obiekty przy nazwach potocznych). „Pomnik Syrenki nad Wisłą”: 3 na 5 prób to zły obiekt. Dwa razy model bierze Syrenkę z Rynku i opisuje ją jako stojącą „nad Wisłą”; raz słusznie odrzuca Syrenkę z Rynku („nie stoi nad Wisłą”), ale wybiera betonową rzeźbę, bo uważa, że stoi na Powiślu. Pozostałe niepowodzenia to 3 przekroczenia limitu czasu zapytania w 22a (wykonanie, nie interpretacja) i jedna odległość, której nie umiemy przypisać do obiektu, choć uwagi wskazują właściwy pomnik.
+7. **Koszt.** Średnio 3,3 zapytania narzędzia na próbę, ok. 47 tys. tokenów wejściowych na próbę (ok. 5 razy więcej niż bez bazy, ale 89% z nich to odczyt z cache) i ok. 1 tys. wyjściowych. Czas odpowiedzi ok. 10–15 s zamiast ok. 4 s.
+
+### 17.2. Co z tego wynika dla artykułu
+
+- **Interpretacja niejasnych słów to cecha modelu.** Nawet z dostępem do danych model zaczyna od tych samych wartości domyślnych i szufladek.
+- **Dostęp do danych zmienia interpretację tylko w dwóch sytuacjach:** gdy wartość daje pusty wynik i gdy w bazie jest gotowa definicja albo rozkład (granica dzielnicy, obrys, wielkości parków). Wtedy interpretacja przechodzi z wartości z głowy na wartość względną wobec danych.
+- **Duże pomyłki przy nazwach potocznych wynikały z braku wglądu w dane.** Z dostępem do bazy prawie znikają; zostaje błędna wiedza modelu o tym, gdzie stoi dany obiekt.
+- **Praktycznie:** dostęp do bazy naprawia błędy dopasowania kosztem ok. 5 razy więcej tokenów i dłuższego czasu odpowiedzi, ale nie zastępuje podania użytkownikowi przyjętego założenia, bo domyślne wartości zostają.
+
+**Zastrzeżenia:** 5 prób na pytanie (seria główna: 10), instrukcja różni się o akapit o narzędziu, jedna konfiguracja narzędzia (20 wierszy, limit 8 odpowiedzi). Sprawdzenie dodane po obejrzeniu wyników serii głównej.
