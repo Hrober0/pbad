@@ -4,12 +4,12 @@ Kilka przykładowych pytań do każdego eksperymentu, a dla każdego z nich: co 
 
 | | Eksperyment 1 | Eksperyment 2 |
 |---|---|---|
-| Hipoteza | H1 | H2 |
+| Hipoteza | H1 | PB2 (pytanie badawcze, dawniej H2) |
 | Co zmieniamy | poziom kontekstu K0–K3 | opis sytuacji pytającego, miejsce, rodzaj obiektu, miasto |
 | Co jest stałe | wersja pytania (naturalna) | kontekst K2, forma zdania i niejasne określenie w obrębie części |
-| Pytania | 20 z [pytania-testowe.md](pytania-testowe.md), wybrane w [selected/H1](../selected/H1/pytania.md) | 29, wypisane w [selected/H2](../selected/H2/pytania.md) |
-| Powtórzenia | 3 | 3 |
-| Liczba wywołań | 20 × 4 × 3 = 240 | 29 × 3 = 87 |
+| Pytania | 20 z [pytania-testowe.md](pytania-testowe.md), wybrane w [selected/H1](../selected/H1/pytania.md) | 72 warianty, wypisane w [selected/H2](../selected/H2/pytania.md) |
+| Powtórzenia | 3 | 10 |
+| Liczba wywołań | 20 × 4 × 3 = 240 | 72 × 10 = 720 |
 | Odpowiedź modelu | samo zapytanie SQL | JSON `{"sql": "...", "uwagi": "..."}` |
 | Co mierzymy | trafność na każdym poziomie i jej przyrosty, rodzaje błędów | przyjęty promień, rodzaj interpretacji, ujawnienie założenia |
 | Potwierdzenie hipotezy | przyrost K1 → K2 większy niż K0 → K1 i K2 → K3 | promień zmienia się z opisem sytuacji, miejscem albo rodzajem obiektu |
@@ -122,6 +122,8 @@ wynik z wynikiem zapytania wzorcowego.
 ---
 
 ## Eksperyment 2: interpretacja niejasnych określeń (H2)
+
+> **Uwaga (24.11.2026):** to jest pierwotny szkic. Aktualna wersja to pytanie badawcze PB2 (dawniej H2), 72 warianty × 10 powtórzeń, ocena opisowa bez rozstrzygania hipotezy. Patrz [selected/H2/pytania.md](../selected/H2/pytania.md), [ocena.md](../selected/H2/ocena.md) i [opracowanie.md](../selected/H2/opracowanie.md).
 
 Sprawdzamy, czy wartość, którą model przyjmuje dla niejasnego określenia przestrzennego, zależy od kontekstu pytania. W każdej części niejasne określenie i forma zdania są stałe, a zmieniamy kontekst wokół nich. Dzięki temu różnica w przyjętej wartości wynika tylko ze zmiany kontekstu.
 
